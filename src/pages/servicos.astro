@@ -1,0 +1,131 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout 
+  title="Serviços e Assessoria Documental | Augusto Narloch"
+  description="Assessoria especializada em regularização de imóveis, contratos de gaveta e análise de matrículas em Araucária."
+>
+  <Header />
+
+  <main class="services-container">
+    <div class="breadcrumb-nav">
+      <a href="/">Início</a> <span class="divider">/</span> <span class="current">Serviços</span>
+    </div>
+
+    <header class="services-header">
+      <span class="subtitle">Especialista em Documentação</span>
+      <h1>Soluções Imobiliárias Completas</h1>
+      <p>Muito além da compra e venda, oferecemos segurança jurídica e suporte técnico para que seu patrimônio esteja sempre regularizado.</p>
+    </header>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">📜</div>
+        <h3>Análise de Matrículas</h3>
+        <p>Análise técnica detalhada da certidão de inteiro teor para identificar ônus, averbações pendentes ou possíveis riscos na transação.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">✍️</div>
+        <h3>Contratos de Gaveta</h3>
+        <p>Elaboração e revisão de instrumentos particulares de compra e venda com cláusulas de proteção para ambas as partes.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🏛️</div>
+        <h3>Regularização de Imóveis</h3>
+        <p>Suporte no processo de averbação de construções, retificação de áreas e encaminhamento junto ao Registro de Imóveis de Araucária.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3>Avaliação Mercadológica</h3>
+        <p>Estudo detalhado do valor real do seu imóvel com base no mercado atual da região metropolitana de Curitiba.</p>
+      </div>
+    </div>
+
+    <section class="cta-services">
+      <h2>Precisa de suporte com algum documento?</h2>
+      <p>Clique abaixo para conversarmos agora mesmo pelo WhatsApp.</p>
+      <a href="https://wa.me/5541995683915" target="_blank" class="cta-button">
+        Falar com Especialista
+      </a>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .services-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 120px 20px 80px;
+  }
+
+  .breadcrumb-nav { 
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 40px; 
+  }
+  .breadcrumb-nav a { color: #2563eb; text-decoration: none; }
+  .breadcrumb-nav .divider { color: #cbd5e1; }
+
+  .services-header { text-align: center; max-width: 800px; margin: 0 auto 80px; }
+  .subtitle { color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.9rem; }
+  .services-header h1 { font-size: 3rem; color: #0f172a; margin: 15px 0; font-weight: 800; letter-spacing: -0.02em; }
+  .services-header p { font-size: 1.2rem; color: #475569; line-height: 1.6; }
+
+  .services-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: 30px; 
+    margin-bottom: 100px;
+  }
+
+  .service-card {
+    background: white;
+    padding: 40px;
+    border-radius: 24px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+    border-color: #2563eb;
+  }
+
+  .service-icon { font-size: 2.5rem; margin-bottom: 20px; }
+  .service-card h3 { font-size: 1.4rem; color: #0f172a; margin-bottom: 15px; font-weight: 700; }
+  .service-card p { color: #64748b; line-height: 1.6; font-size: 1rem; }
+
+  .cta-services {
+    background: #0f172a;
+    padding: 80px 40px;
+    border-radius: 40px;
+    text-align: center;
+    color: white;
+  }
+
+  .cta-services h2 { font-size: 2rem; margin-bottom: 15px; font-weight: 800; }
+  .cta-services p { color: #94a3b8; margin-bottom: 30px; font-size: 1.1rem; }
+
+  .cta-button {
+    display: inline-block;
+    background: #2563eb;
+    color: white;
+    padding: 18px 40px;
+    border-radius: 16px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.3s;
+  }
+
+  .cta-button:hover { background: #3b82f6; transform: scale(1.05); }
+
+  @media (max-width: 768px) {
+    .services-header h1 { font-size: 2.2rem; }
+    .services-container { padding-top: 100px; }
+  }
+</style>
