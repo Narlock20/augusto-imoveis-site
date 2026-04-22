@@ -1,0 +1,211 @@
+---
+// src/components/Filters.astro
+const { properties } = Astro.props;
+
+// Extrai cidades e bairros únicos dinamicamente
+const cities = [...new Set(properties.map(p => p.city))].filter(Boolean).sort();
+const neighborhoods = [...new Set(properties.map(p => p.neighborhood))].filter(Boolean).sort();
+---
+
+<section class="filters-container">
+  <div class="filter-group search-box">
+    <label for="search">Busca por palavras chave</label>
+    <div class="input-wrapper">
+      <svg class="search-icon" width="16" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="search" placeholder="Ex: Casa 3 quartos..." />
+    </div>
+  </div>
+
+  <div class="filter-group">
+    <label for="filter-city">Cidade</label>
+    <select id="filter-city">
+      <option value="">Todas as cidades</option>
+      {cities.map(city => (
+        <option value={city}>{city.charAt(0).toUpperCase() + city.slice(1)}</option>
+      ))}
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="filter-bairro">Bairro</label>
+    <select id="filter-bairro">
+      <option value="">Todos os bairros</option>
+      {neighborhoods.map(bairro => (
+        <option value={bairro}>{bairro}</option>
+      ))}
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="filter-price">Preço máximo</label>
+    <select id="filter-price">
+      <option value="">Qualquer preço</option>
+      <option value="200000">Até R$ 200 mil</option>
+      <option value="400000">Até R$ 400 mil</option>
+      <option value="600000">Até R$ 600 mil</option>
+      <option value="1000000">Até R$ 1 milhão</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="filter-bedrooms">Quartos</label>
+    <select id="filter-bedrooms">
+      <option value="">Qualquer número</option>
+      <option value="1">1+ Quartos</option>
+      <option value="2">2+ Quartos</option>
+      <option value="3">3+ Quartos</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="filter-status">Finalidade</label>
+    <select id="filter-status">
+        <option value="">Venda ou Aluguel</option>
+        <option value="venda">Comprar</option>
+        <option value="aluguel">Alugar</option>
+    </select>
+    </div>
+
+  <button type="button" id="clear-filters" class="btn-clear">Limpar Filtros</button>
+</section>
+
+<style>
+/* 1. LAYOUT DO CONTAINER (Totalmente invisível agora) */
+  .filters-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px;
+    background: transparent !important; /* Força a remoção de qualquer fundo sólido */
+    border: none !important; /* Remove qualquer borda sólida que tenha ficado */
+    padding: 0 !important; /* Removemos o padding interno para colar no vidro */
+    box-shadow: none !important; 
+    margin-bottom: 0;
+  }
+
+  /* Busca Livre ocupa a linha toda */
+  .search-box {
+    grid-column: 1 / -1;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* Rótulos dos campos (Bairro, Preço, etc) agora em branco para dar contraste */
+  label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+
+/* CAMPOS DE VIDRO (A transparência real) */
+  input, select {
+    width: 100%;
+    
+    /* ESSA É A LINHA QUE CORRIGE O VAZAMENTO */
+    box-sizing: border-box; 
+    
+    padding: 14px 16px;
+    border-radius: 12px;
+    
+    background: rgba(255, 255, 255, 0.7) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    
+    font-size: 14px;
+    color: #0f172a;
+    font-weight: 500;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    appearance: none;
+  }
+
+
+  .input-wrapper { 
+    position: relative; 
+    width: 100%; 
+    box-sizing: border-box; /* Adicione aqui também por segurança */
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+  }
+
+  input#search {
+    padding-left: 44px; /* Abre espaço para o ícone */
+  }
+
+  /* Seta Customizada para os Selects */
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+
+  /* O EFEITO FOCUS (Brilho Azul) */
+  input:focus, select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  }
+
+  input::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
+  }
+
+  /* 4. BOTÃO DE LIMPAR (GHOST BUTTON COM MOVIMENTO) */
+  .btn-clear {
+    grid-column: 1 / -1;
+    margin-top: 12px;
+    padding: 14px;
+    
+    /* Design limpo em vidro */
+    background: rgba(255, 255, 255, 0.05); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #f8fafc; /* Branco suave para dar contraste */
+    
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    
+    /* A MÁGICA DA SUAVIDADE: cubic-bezier */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(5px);
+  }
+
+  /* EFEITOS DE HOVER: Micro-interação */
+  .btn-clear:hover {
+    background: rgba(255, 255, 255, 0.15); /* Vidro mais visível */
+    color: #ffffff;
+    transform: translateY(-2px); /* Sobe sutilmente, como os outros botões */
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-clear:active {
+    transform: translateY(-1px);
+  }
+
+  /* 5. RESPONSIVIDADE PARA CELULAR */
+  @media (max-width: 600px) {
+    .filters-container {
+      grid-template-columns: 1fr; /* Tudo empilhado no celular */
+      gap: 16px;
+    }
+  }
+</style>

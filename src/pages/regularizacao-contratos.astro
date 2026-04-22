@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout 
+  title="Regularização e Contratos | Augusto Narloch Imóveis"
+  description="Soluções para contratos de gaveta, averbações e redação de instrumentos de compra e venda seguros."
+>
+  <Header />
+
+  <main class="legal-container">
+    <div class="legal-card">
+      <nav class="breadcrumb-nav">
+         <a href="/">Início</a> <span class="divider">/</span> <span class="current">Regularização e Contratos</span>
+      </nav>
+
+      <h1>Regularização e Contratos</h1>
+      
+      <div class="legal-content">
+        <p class="lead">Um contrato mal redigido é a principal causa de dores de cabeça no mercado imobiliário. Nós transformamos acordos verbais e papéis informais em documentos com peso de lei.</p>
+
+        <h2>Fim do "Contrato de Gaveta"</h2>
+        <p>A realidade brasileira está cheia de imóveis transacionados por "contratos de gaveta", onde o comprador não possui a segurança do registro oficial no cartório. Nós desenrolamos esse tipo de pendência, analisando a cadeia sucessória para regularizar a posse e transferir a propriedade de fato para quem é de direito.</p>
+
+        <h2>Contratos Personalizados</h2>
+        <p>Não usamos modelos prontos de internet. Cada negociação é única. Redigimos Instrumentos Particulares de Compra e Venda com cláusulas específicas que protegem você contra desistências injustificadas, multas, vícios ocultos e atrasos na entrega das chaves.</p>
+
+        <h2>Averbações e Desmembramentos</h2>
+        <p>Construiu no terreno e não avisou a prefeitura? Precisa desmembrar um lote? Imóveis irregulares não aceitam financiamento bancário e perdem até 40% do valor de mercado. Atuamos na coordenação técnica para averbar construções, regularizar plantas e emitir o Habite-se, destravando a liquidez do seu imóvel.</p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  /* Use o MESMO <style> dos arquivos anteriores */
+  :global(html), :global(body) { margin: 0 !important; padding: 0 !important; background-color: #b2bfd0; font-family: 'Inter', system-ui, sans-serif; }
+  .legal-container { padding: 120px 20px 100px; max-width: 900px; margin: 0 auto; }
+  .legal-card { background: #ffffff; padding: 60px; border-radius: 32px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05); }
+  .breadcrumb-nav { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 30px; }
+  .breadcrumb-nav a { color: #2563eb; text-decoration: none; }
+  .breadcrumb-nav .divider { color: #cbd5e1; }
+  .breadcrumb-nav .current { color: #0f172a; }
+  h1 { font-size: 2.5rem; color: #0f172a; font-weight: 800; margin: 0 0 30px 0; letter-spacing: -0.02em; }
+  .lead { font-size: 1.2rem; color: #334155; font-weight: 500; border-left: 4px solid #2563eb; padding-left: 16px; margin-bottom: 30px; }
+  .legal-content h2 { font-size: 1.4rem; color: #0f172a; margin: 35px 0 15px; font-weight: 700; }
+  .legal-content p { line-height: 1.8; color: #475569; font-size: 1.05rem; margin-bottom: 15px; }
+  @media (max-width: 768px) { .legal-container { padding-top: 100px; } .legal-card { padding: 30px 20px; border-radius: 24px; } h1 { font-size: 2rem; } }
+</style>

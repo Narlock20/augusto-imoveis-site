@@ -1,0 +1,135 @@
+---
+// src/pages/privacidade.astro
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout 
+  title="Política de Privacidade | Augusto Narloch Imóveis"
+  description="Saiba como protegemos seus dados pessoais de acordo com a LGPD."
+>
+  <Header />
+
+  <main class="legal-container">
+    <div class="legal-card">
+      <nav class="breadcrumb-nav">
+         <a href="/">Início</a> <span class="divider">/</span> <span class="current">Política de Privacidade</span>
+      </nav>
+
+      <h1>Política de Privacidade</h1>
+      <p class="last-updated">Última atualização: Abril de 2026</p>
+
+      <div class="legal-content">
+        <h2>1. Compromisso com a Privacidade</h2>
+        <p>A privacidade e a segurança dos seus dados são prioridades para nós. Esta política foi criada para demonstrar nosso compromisso com a Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018) e explicar como lidamos com suas informações.</p>
+
+        <h2>2. Coleta de Dados</h2>
+        <p>Nosso site tem caráter majoritariamente informativo (vitrine). Não exigimos a criação de contas ou realização de login. Os dados pessoais (como nome e telefone) são coletados apenas quando você decide, de forma voluntária, entrar em contato conosco através do botão de WhatsApp ou possíveis formulários de agendamento.</p>
+
+        <h2>3. Uso das Informações</h2>
+        <p>As informações que você nos fornece voluntariamente via WhatsApp são utilizadas exclusivamente para:</p>
+        <ul>
+          <li>Responder às suas dúvidas sobre os imóveis;</li>
+          <li>Agendar visitas presenciais;</li>
+          <li>Auxiliar na negociação e assessoria jurídica imobiliária caso o negócio avance.</li>
+        </ul>
+
+        <h2>4. Compartilhamento de Dados</h2>
+        <p><strong>Nós não vendemos, alugamos ou repassamos seus dados pessoais para terceiros.</strong> Suas informações só serão compartilhadas caso haja andamento em uma negociação de compra, venda ou locação, situação em que dados específicos precisarão ser enviados a cartórios, instituições financeiras ou correspondentes bancários, sempre com o seu consentimento e ciência prévia.</p>
+
+        <h2>5. Cookies e Rastreamento</h2>
+        <p>Utilizamos cookies estritamente necessários para o funcionamento básico do site e cookies analíticos (como Google Analytics) de forma anônima, apenas para entender o tráfego do nosso site e melhorar a experiência de navegação.</p>
+
+        <h2>6. Seus Direitos (LGPD)</h2>
+        <p>Você tem o direito de solicitar a qualquer momento:</p>
+        <ul>
+          <li>A confirmação da existência de tratamento dos seus dados;</li>
+          <li>A correção de dados incompletos ou desatualizados;</li>
+          <li>A eliminação dos dados pessoais tratados com o seu consentimento (como mensagens de WhatsApp no nosso histórico de atendimento).</li>
+        </ul>
+
+        <h2>7. Contato para Privacidade</h2>
+        <p>Se você tiver qualquer dúvida sobre como seus dados estão sendo tratados, sinta-se à vontade para nos acionar diretamente pelo WhatsApp: (41) 99568-3915.</p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  /* Mantendo o mesmo estilo limpo e premium da página de Termos */
+  :global(html), :global(body) {
+    margin: 0 !important; padding: 0 !important;
+    background-color: #b2bfd0;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .legal-container {
+    padding: 120px 20px 100px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .legal-card {
+    background: #ffffff;
+    padding: 60px;
+    border-radius: 32px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+  }
+
+  .breadcrumb-nav { 
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 30px; 
+  }
+  .breadcrumb-nav a { color: #2563eb; text-decoration: none; }
+  .breadcrumb-nav .divider { color: #cbd5e1; }
+  .breadcrumb-nav .current { color: #0f172a; }
+
+  h1 {
+    font-size: 2.5rem;
+    color: #0f172a;
+    font-weight: 800;
+    margin: 0 0 10px 0;
+    letter-spacing: -0.02em;
+  }
+
+  .last-updated {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .legal-content h2 {
+    font-size: 1.4rem;
+    color: #0f172a;
+    margin: 35px 0 15px;
+    font-weight: 700;
+  }
+
+  .legal-content p {
+    line-height: 1.8;
+    color: #475569;
+    font-size: 1.05rem;
+    margin-bottom: 15px;
+  }
+
+  .legal-content ul {
+    color: #475569;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    padding-left: 25px;
+  }
+
+  .legal-content li {
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .legal-container { padding-top: 100px; }
+    .legal-card { padding: 30px 20px; border-radius: 24px; }
+    h1 { font-size: 2rem; }
+  }
+</style>

@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout 
+  title="Assessoria Jurídica | Augusto Narloch Imóveis"
+  description="Segurança total na compra e venda de imóveis com nossa assessoria jurídica especializada."
+>
+  <Header />
+
+  <main class="legal-container">
+    <div class="legal-card">
+      <nav class="breadcrumb-nav">
+         <a href="/">Início</a> <span class="divider">/</span> <span class="current">Assessoria Jurídica</span>
+      </nav>
+
+      <h1>Assessoria Jurídica</h1>
+      
+      <div class="legal-content">
+        <p class="lead">Negociações imobiliárias envolvem altos valores e o patrimônio de uma vida. Nossa assessoria jurídica existe para garantir que você não tenha surpresas financeiras ou judiciais.</p>
+
+        <h2>Blindagem da Negociação (Due Diligence)</h2>
+        <p>Não somos apenas intermediadores; somos validadores de negócios. Antes de qualquer assinatura, realizamos um levantamento completo (Due Diligence) das certidões negativas do imóvel e dos vendedores. Isso garante que a propriedade não seja alvo de execuções fiscais, trabalhistas ou disputas judiciais que possam anular a venda no futuro.</p>
+
+        <h2>Transparência e Prevenção</h2>
+        <p>O foco do nosso departamento jurídico é preventivo. Analisamos os riscos de ponta a ponta e apresentamos um parecer claro. Se houver qualquer risco real ao seu patrimônio, nós seremos os primeiros a recomendar que o negócio não seja feito. Sua segurança vem antes da nossa comissão.</p>
+
+        <h2>Acompanhamento até o Cartório</h2>
+        <p>Acompanhamos você desde a proposta inicial até a lavratura da Escritura Pública e o efetivo registro no Cartório de Imóveis, garantindo que o imóvel passe para o seu nome sem pendências legais.</p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  /* COLE AQUI EXATAMENTE O MESMO BLOCO <style> DA PÁGINA termos.astro */
+  :global(html), :global(body) { margin: 0 !important; padding: 0 !important; background-color: #b2bfd0; font-family: 'Inter', system-ui, sans-serif; }
+  .legal-container { padding: 120px 20px 100px; max-width: 900px; margin: 0 auto; }
+  .legal-card { background: #ffffff; padding: 60px; border-radius: 32px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05); }
+  .breadcrumb-nav { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 30px; }
+  .breadcrumb-nav a { color: #2563eb; text-decoration: none; }
+  .breadcrumb-nav .divider { color: #cbd5e1; }
+  .breadcrumb-nav .current { color: #0f172a; }
+  h1 { font-size: 2.5rem; color: #0f172a; font-weight: 800; margin: 0 0 30px 0; letter-spacing: -0.02em; }
+  .lead { font-size: 1.2rem; color: #334155; font-weight: 500; border-left: 4px solid #2563eb; padding-left: 16px; margin-bottom: 30px; }
+  .legal-content h2 { font-size: 1.4rem; color: #0f172a; margin: 35px 0 15px; font-weight: 700; }
+  .legal-content p { line-height: 1.8; color: #475569; font-size: 1.05rem; margin-bottom: 15px; }
+  @media (max-width: 768px) { .legal-container { padding-top: 100px; } .legal-card { padding: 30px 20px; border-radius: 24px; } h1 { font-size: 2rem; } }
+</style>

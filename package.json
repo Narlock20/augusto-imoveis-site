@@ -1,0 +1,21 @@
+{
+  "name": "site-imobiliaria",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
+    "@sanity/astro": "^3.3.1",
+    "@sanity/image-url": "^2.1.1",
+    "astro": "^6.1.8",
+    "groq": "^5.21.0"
+  }
+}

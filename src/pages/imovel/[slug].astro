@@ -1,0 +1,501 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import { sanityClient } from 'sanity:client';
+import { propertyBySlugQuery } from '../../lib/queries';
+import { getCloudinaryUrl } from '../../lib/cloudinary';
+import { urlFor } from '../../lib/image';
+
+export async function getStaticPaths() {
+  const slugsQuery = `*[_type == "property" && defined(slug.current)]{ "slug": slug.current }`;
+  const properties = await sanityClient.fetch(slugsQuery);
+  return properties.map((property) => ({
+    params: { slug: property.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const imovel = await sanityClient.fetch(propertyBySlugQuery, { slug });
+
+if (!imovel) return Astro.redirect('/404');
+
+// --- LÓGICA DE DADOS ---
+const statusArray = Array.isArray(imovel.status) 
+  ? imovel.status.map(s => s.toLowerCase().trim()) 
+  : [imovel.status?.toLowerCase().trim() || ''];
+
+const isVenda = statusArray.includes('venda');
+const isAluguel = statusArray.includes('aluguel') || statusArray.includes('locação');
+
+const mainRawUrl = urlFor(imovel.mainImage).url();
+const mainOptimized = getCloudinaryUrl(mainRawUrl, 1200, 800);
+const mainFullSize = getCloudinaryUrl(mainRawUrl, 1920, 1080);
+
+const tipoFisico = imovel.propertyType ? imovel.propertyType : 'Imóvel';
+---
+
+<Layout 
+  title={`${imovel.title} | ${imovel.neighborhood}`}
+  description={`${tipoFisico} em ${imovel.neighborhood}. Confira agora!`}
+  image={mainFullSize}
+>
+  <link rel="stylesheet" href="https://unpkg.com/photoswipe@5.4.3/dist/photoswipe.css">
+  <Header />
+
+  <main class="property-container">
+    
+    <div class="gallery-wrapper">
+      <section class="editorial-gallery" id="property-gallery">
+        <div class="mosaic-grid">
+          
+          <a href={mainFullSize} data-pswp-width="1920" data-pswp-height="1080" class="main-frame">
+            <img src={mainOptimized} alt={imovel.title} loading="eager" />
+            <div class="image-gradient-overlay"></div>
+            <div class="gallery-badges">
+              {isVenda && <span class="pula-badge venda">À VENDA</span>}
+              {isAluguel && <span class="pula-badge aluguel">ALUGUEL</span>}
+            </div>
+            <div class="zoom-hint">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              Ampliar Imagem
+            </div>
+          </a>
+
+          <div class="side-frames">
+            {imovel.gallery?.slice(0, 2).map((img) => {
+              const rawUrl = urlFor(img).url();
+              return (
+                <a href={getCloudinaryUrl(rawUrl, 1920, 1080)} data-pswp-width="1920" data-pswp-height="1080" class="side-item">
+                  <img src={getCloudinaryUrl(rawUrl, 600, 400)} alt="Detalhes do imóvel" />
+                  <div class="image-gradient-overlay"></div>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+
+        {imovel.gallery?.slice(2).map((img) => {
+          const rawUrl = urlFor(img).url();
+          return (
+            <a href={getCloudinaryUrl(rawUrl, 1920, 1080)} data-pswp-width="1920" data-pswp-height="1080" class="hidden-pswp"></a>
+          );
+        })}
+      </section>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="info-column">
+        <div class="main-info-card">
+          
+          <nav class="breadcrumb-nav">
+             <a href="/">Início</a> 
+             <span class="divider">/</span> {imovel.city} 
+             <span class="divider">/</span> <span class="current">{imovel.neighborhood}</span>
+          </nav>
+
+          <header class="property-header">
+            <div class="location-badge">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              {imovel.neighborhood}, {imovel.city}
+            </div>
+            <h1>{imovel.title}</h1>
+          </header>
+
+          <div class="tech-strip">
+            <div class="tech-box">
+              <div class="t-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3L3 21M21 3v14a2 2 0 0 1-2 2H5M21 3H7a2 2 0 0 0-2 2v14"/></svg>
+              </div>
+              <div class="t-data">
+                <span class="t-label">Área Útil</span>
+                <span class="t-value">{imovel.area} m²</span>
+              </div>
+            </div>
+            <div class="tech-box">
+              <div class="t-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7v11M21 7v11M6 10v-3a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3M3 14h18"/></svg>
+              </div>
+              <div class="t-data">
+                <span class="t-label">Dormitórios</span>
+                <span class="t-value">{imovel.bedrooms} {imovel.suites > 0 && <span class="t-sub">({imovel.suites} suítes)</span>}</span>
+              </div>
+            </div>
+            <div class="tech-box">
+              <div class="t-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+              </div>
+              <div class="t-data">
+                <span class="t-label">Banheiros</span>
+                <span class="t-value">{imovel.bathrooms || '0'}</span>
+              </div>
+            </div>
+            <div class="tech-box">
+              <div class="t-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+              </div>
+              <div class="t-data">
+                <span class="t-label">Vagas</span>
+                <span class="t-value">{imovel.parkingSlots || '0'}</span>
+              </div>
+            </div>
+          </div>
+
+          <section class="description-block">
+            <h2>Sobre o Imóvel</h2>
+            <div class="description-text">{imovel.description}</div>
+          </section>
+
+          {imovel.amenities && (
+            <section class="amenities-block">
+              <h2>Diferenciais Exclusivos</h2>
+              <div class="amenities-pills">
+                {imovel.amenities.map(item => (
+                  <div class="amenity-pill">
+                    <div class="pill-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M20 6L9 17l-5-5"/></svg>
+                    </div>
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+        </div>
+      </div>
+
+      <aside class="sidebar-wrapper">
+        <div class="premium-card">
+          <div class="price-section">
+            
+            {isVenda && imovel.priceVenda && (
+              <div class="price-row">
+                <span class="p-label">Investimento Total</span>
+                <span class="p-value">R$ {imovel.priceVenda.toLocaleString('pt-BR')}</span>
+              </div>
+            )}
+            
+            {isAluguel && imovel.priceAluguel && (
+              <div class="price-row" style={isVenda ? "margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1);" : ""}>
+                <span class="p-label">Locação Mensal</span>
+                <span class="p-value">R$ {imovel.priceAluguel.toLocaleString('pt-BR')} <small>/mês</small></span>
+              </div>
+            )}
+
+            {!imovel.priceVenda && !imovel.priceAluguel && imovel.price && (
+               <div class="price-row">
+                <span class="p-label">Valor</span>
+                <span class="p-value">R$ {imovel.price.toLocaleString('pt-BR')}</span>
+              </div>
+            )}
+
+          </div>
+
+          <div class="cta-section">
+            <p>Atendimento exclusivo. Garantimos uma transação segura e sem burocracia para você.</p>
+            <a href={`https://wa.me/5541995683915?text=Olá! Vi o imóvel "${imovel.title}" e gostaria de agendar uma visita.`} 
+               class="whatsapp-btn" target="_blank">
+               Falar com Especialista
+            </a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    import PhotoSwipeLightbox from 'https://unpkg.com/photoswipe@5.4.3/dist/photoswipe-lightbox.esm.js';
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: '#property-gallery',
+      children: 'a',
+      pswpModule: () => import('https://unpkg.com/photoswipe@5.4.3/dist/photoswipe.esm.js')
+    });
+    lightbox.init();
+  </script>
+</Layout>
+
+<style>
+  /* =========================================
+     RESET E VARIÁVEIS DA PÁGINA
+  ========================================= */
+  :global(html), :global(body) {
+    margin: 0 !important; padding: 0 !important;
+    background-color: #b2bfd0;
+    overflow-x: hidden;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .property-container { 
+    background: #b2bfd0; 
+    padding-bottom: 100px; 
+  }
+
+/* =========================================
+     GALERIA MOSAICO (ORGÂNICA E FLUTUANTE)
+  ========================================= */
+  .gallery-wrapper {
+    width: 100%;
+    margin-bottom: 50px; 
+  }
+
+  .editorial-gallery { 
+    max-width: 1300px; 
+    margin: 0 auto; 
+    padding: 120px 20px 0; 
+  }
+  
+  .mosaic-grid { 
+    display: grid; 
+    grid-template-columns: 2fr 1fr; /* A foto principal ocupa 2/3 da tela */
+    gap: 20px; /* Aumentei o espaço entre elas para destacar que são quadros soltos */
+    /* REMOVIDO: height: 520px e overflow: hidden. Agora elas são livres! */
+  }
+
+  .main-frame { 
+    position: relative; 
+    border-radius: 28px; /* Arredondamento suave e moderno */
+    overflow: hidden; 
+    display: block;
+    cursor: zoom-in;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08); /* Sombra própria para flutuar */
+    background: #cbd5e1; 
+    aspect-ratio: 16 / 10; /* Garante um formato de tela de cinema, independente do monitor */
+  }
+
+  .side-frames { 
+    display: grid; 
+    grid-template-rows: 1fr 1fr; /* Divide o espaço lateral exatamente ao meio */
+    gap: 20px; 
+  }
+
+  .side-item { 
+    position: relative; 
+    border-radius: 28px; 
+    overflow: hidden; 
+    display: block;
+    cursor: zoom-in;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    background: #cbd5e1;
+    /* Não precisa de altura, ele preenche o espaço de "1fr" deixado pela foto principal */
+  }
+
+  .main-frame img, .side-item img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; /* Faz a foto respeitar a moldura sem distorcer */
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .main-frame:hover img, .side-item:hover img { 
+    transform: scale(1.04); 
+  }
+
+  /* EFEITO DE TOQUE NAS FOTOS (Gradiente) */
+  .image-gradient-overlay {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 50%;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.6) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .hidden-pswp { display: none; }
+
+  /* BADGES SOBRE AS FOTOS */
+  .gallery-badges { 
+    position: absolute; top: 24px; left: 24px; 
+    display: flex; flex-direction: column; gap: 8px; z-index: 10; 
+  }
+  .pula-badge { 
+    padding: 8px 18px; border-radius: 50px; font-size: 11px; font-weight: 800; 
+    color: white; letter-spacing: 1.5px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2);
+  }
+  .pula-badge.venda { background: rgba(16, 185, 129, 0.9); }
+  .pula-badge.aluguel { background: rgba(37, 99, 235, 0.9); }
+
+  .zoom-hint {
+    position: absolute; bottom: 24px; right: 24px;
+    background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white; padding: 10px 20px; border-radius: 50px; font-size: 12px; font-weight: 700;
+    opacity: 0; transition: 0.3s; backdrop-filter: blur(8px);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .main-frame:hover .zoom-hint { opacity: 1; transform: translateY(-4px); }
+
+  /* RESPONSIVO DA GALERIA */
+  @media (max-width: 768px) {
+    .editorial-gallery { padding-top: 100px; }
+    .mosaic-grid { 
+      grid-template-columns: 1fr; 
+      /* No celular, volta a ter proporção de foto única */
+    }
+    .main-frame { aspect-ratio: 4 / 3; }
+    .side-frames { display: none; }
+  }
+
+  /* =========================================
+     MOLDURAS PRINCIPAIS
+  ========================================= */
+  .content-wrapper { 
+    max-width: 1300px; margin: 0 auto; padding: 0 20px; 
+    display: grid; 
+    grid-template-columns: minmax(0, 1fr) 400px; /* Impede esmagamento */
+    gap: 40px; 
+    align-items: start;
+  }
+
+  .main-info-card {
+    background: #ffffff;
+    padding: 50px;
+    border-radius: 32px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+  }
+
+  /* CARD ESCURO PREMIUM (SIDEBAR) */
+  .premium-card {
+    position: sticky; top: 120px;
+    background: #0f172a; /* Azul Marinho Escuro */
+    color: white;
+    padding: 45px;
+    border-radius: 32px;
+    box-shadow: 0 25px 50px rgba(15, 23, 42, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* HEADER TEXTOS */
+  .breadcrumb-nav { 
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 35px; 
+  }
+  .breadcrumb-nav a { color: #2563eb; text-decoration: none; transition: 0.2s;}
+  .breadcrumb-nav a:hover { color: #1d4ed8; }
+  .breadcrumb-nav .divider { color: #cbd5e1; }
+  .breadcrumb-nav .current { color: #0f172a; }
+
+  .property-header h1 { font-size: 2.8rem; line-height: 1.15; color: #0f172a; font-weight: 800; margin: 0; letter-spacing: -0.02em;}
+  
+  .location-badge { 
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #f1f5f9; color: #475569; padding: 8px 16px; 
+    border-radius: 50px; font-size: 13px; font-weight: 700; 
+    margin-bottom: 20px; border: 1px solid #e2e8f0; 
+  }
+
+  /* =========================================
+     FAIXA TÉCNICA E ÍCONES
+  ========================================= */
+  .tech-strip { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr);
+    background: #ffffff; 
+    border-radius: 20px; 
+    padding: 24px 0; 
+    margin: 40px 0; 
+    border-top: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .tech-box { 
+    display: flex; align-items: center; gap: 16px; 
+    border-right: 1px solid #f1f5f9; 
+    padding: 0 20px;
+  }
+  .tech-box:last-child { border: none; }
+  
+  .t-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px; background: #f8fafc; color: #2563eb;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .t-data { display: flex; flex-direction: column; gap: 2px; }
+  .t-label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;}
+  .t-value { font-size: 1.2rem; font-weight: 800; color: #0f172a; }
+  .t-sub { font-size: 0.85rem; color: #94a3b8; font-weight: 600; }
+
+/* =========================================
+     DESCRIÇÃO E COMODIDADES (PILLS)
+  ========================================= */
+  .description-block h2, .amenities-block h2 { 
+    font-size: 1.6rem; color: #0f172a; margin-bottom: 24px; font-weight: 800; letter-spacing: -0.01em;
+  }
+  .description-text { 
+    line-height: 1.8; color: #475569; font-size: 1.1rem; white-space: pre-line; margin-bottom: 50px; 
+  }
+
+  .amenities-pills { 
+    display: flex; flex-wrap: wrap; gap: 12px; 
+  }
+  
+  .amenity-pill { 
+    background: #f8fafc; padding: 8px 18px 8px 10px; border-radius: 50px; border: 1px solid #e2e8f0;
+    display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: #334155;
+    transition: 0.2s;
+  }
+  
+  .amenity-pill:hover { 
+    background: #ffffff; transform: translateY(-2px); border-color: #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  }
+  
+  .pill-icon {
+    width: 24px; height: 24px;
+    background: #ecfdf5; /* Fundo verde super claro */
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  
+  .pill-icon svg { 
+    width: 12px; height: 12px; 
+    color: #10b981; /* Verde esmeralda */
+  }
+  /* =========================================
+     SIDEBAR ESCURA (PREÇOS)
+  ========================================= */
+  .price-section { margin-bottom: 35px; }
+  .price-row { display: flex; flex-direction: column; gap: 6px; }
+  .p-label { font-size: 12px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
+  .p-value { font-size: 2.4rem; font-weight: 800; color: #ffffff; letter-spacing: -0.02em;}
+  .p-value small { font-size: 1.2rem; color: #94a3b8; font-weight: 600; }
+
+  .cta-section p { font-size: 14.5px; color: #cbd5e1; line-height: 1.6; margin-bottom: 24px; font-weight: 400;}
+  
+  .whatsapp-btn {
+    display: block; text-align: center; 
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); 
+    color: #fff; text-decoration: none;
+    padding: 20px; border-radius: 16px; font-weight: 700; font-size: 16px; 
+    transition: 0.3s; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+  }
+  .whatsapp-btn:hover { background: #1d4ed8; transform: translateY(-3px); box-shadow: 0 12px 25px rgba(37, 99, 235, 0.4); }
+
+  .trust-footer { 
+    margin-top: 30px; display: flex; justify-content: space-between; align-items: center; 
+    padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); 
+  }
+  .ref-tag { font-size: 12px; color: #64748b; font-weight: 700; }
+  .trust-tag { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #10b981; }
+
+  /* =========================================
+     RESPONSIVO (TRAVAS DE SEGURANÇA)
+  ========================================= */
+  @media (max-width: 1150px) {
+    /* Desarma a barra lateral para baixo em telas médias */
+    .content-wrapper { grid-template-columns: 1fr; }
+    .premium-card { position: static; margin-bottom: 40px; }
+    .tech-strip { grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 24px; }
+    .tech-box { border: none; padding: 0; }
+  }
+
+  @media (max-width: 768px) {
+    .editorial-gallery { padding-top: 100px; }
+    .mosaic-grid { grid-template-columns: 1fr; height: 380px; }
+    .side-frames { display: none; }
+    
+    .main-info-card { padding: 30px 20px; border-radius: 24px; }
+    .premium-card { padding: 35px 24px; border-radius: 24px; }
+    .property-header h1 { font-size: 2.2rem; }
+    
+    .tech-strip { grid-template-columns: 1fr; }
+  }
+</style>

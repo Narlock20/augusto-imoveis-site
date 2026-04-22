@@ -1,0 +1,104 @@
+---
+// src/pages/alugue.astro
+import Layout from '../layouts/Layout.astro'
+import Header from '../components/Header.astro'
+import ImovelCard from '../components/ImovelCard.astro'
+
+import { sanityClient } from 'sanity:client'
+import { allPropertiesQuery } from '../lib/queries'
+import { urlFor } from '../lib/image'
+
+const allProperties = await sanityClient.fetch(allPropertiesQuery);
+
+// Filtra garantindo que 'aluguel' esteja presente, seja em string ou array
+const propertiesForRent = allProperties.filter(p => {
+  const status = Array.isArray(p.status) ? p.status : [p.status];
+  return status.some(s => s?.toLowerCase() === 'aluguel');
+});
+---
+
+<Layout title="Imóveis para Alugar | Augusto Narloch">
+  <div class="site-texture"></div>
+  
+  <Header />
+
+  <main class="internal-page fade-in">
+    <section class="internal-header">
+      <div class="header-content">
+        <h1>Imóveis para Alugar</h1>
+        <p>Encontre o imóvel ideal com a agilidade que você precisa.</p>
+      </div>
+    </section>
+
+    <section class="section-container">
+      {propertiesForRent.length > 0 ? (
+        <div class="grid">
+        {propertiesForRent.map((property) => (
+            <ImovelCard
+            imovel={property}
+            exibirComo="aluguel" 
+            imageUrl={property.mainImage ? urlFor(property.mainImage).width(800).url() : '/fallback-img.jpg'}
+            />
+        ))}
+        </div>
+      ) : (
+        <div class="empty-state-card">
+          <h3>Nenhum imóvel para alugar disponível</h3>
+          <p>Nossa lista de locação é atualizada diariamente. Tente novamente em breve.</p>
+        </div>
+      )}
+    </section>
+  </main>
+</Layout>
+
+<style>
+  /* RESET GLOBAL (Mata as listras laterais e aplica o fundo) */
+  :global(html), :global(body) {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #b2bfd0;
+    overflow-x: hidden;
+  }
+
+  .internal-page {
+    background-color: #b2bfd0;
+    min-height: 100vh;
+    padding-top: 80px; 
+  }
+
+  .site-texture {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999; opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  .internal-header {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 20px 24px 40px;
+    text-align: center;
+  }
+
+  .internal-header h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+  }
+
+  .internal-header p {
+    font-size: 1.2rem;
+    color: #475569;
+  }
+
+  .section-container { max-width: 1300px; margin: 0 auto; padding: 0 24px 80px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 40px; }
+  
+  .empty-state-card { text-align: center; padding: 80px 20px; background: rgba(255,255,255,0.3); border-radius: 24px; border: 1px dashed rgba(0,0,0,0.1); }
+  .empty-state-card h3 { font-size: 1.4rem; margin-bottom: 8px; color: #0f172a; }
+  .empty-state-card p { color: #64748b; }
+  
+  .fade-in { animation: fadeIn 0.8s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+</style>

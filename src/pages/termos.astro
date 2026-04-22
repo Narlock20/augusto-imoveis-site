@@ -1,0 +1,109 @@
+---
+// src/pages/termos.astro
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout 
+  title="Termos de Uso | Augusto Narloch Imóveis"
+  description="Termos de uso e condições de navegação do site Augusto Narloch Imóveis."
+>
+  <Header />
+
+  <main class="legal-container">
+    <div class="legal-card">
+      <nav class="breadcrumb-nav">
+         <a href="/">Início</a> <span class="divider">/</span> <span class="current">Termos de Uso</span>
+      </nav>
+
+      <h1>Termos de Uso</h1>
+      <p class="last-updated">Última atualização: Abril de 2026</p>
+
+      <div class="legal-content">
+        <h2>1. Aceitação dos Termos</h2>
+        <p>Ao acessar e utilizar o site, você concorda com os presentes Termos de Uso. Se você não concordar com qualquer parte destes termos, recomendamos que não utilize nosso site.</p>
+
+        <h2>2. Propósito do Site</h2>
+        <p>Este site funciona como uma vitrine digital para exibição de imóveis disponíveis para venda e locação em Araucária e região. Todas as negociações e fechamentos de contratos são realizados de forma externa, geralmente iniciados via WhatsApp ou atendimento presencial.</p>
+
+        <h2>3. Precisão das Informações</h2>
+        <p>Esforçamo-nos para garantir que as descrições, imagens e preços dos imóveis estejam sempre atualizados e corretos. No entanto, o mercado imobiliário é dinâmico. <strong>Os preços, condições e a disponibilidade dos imóveis podem ser alterados a qualquer momento, sem aviso prévio.</strong> As informações presentes no site não substituem a confirmação direta com nossa equipe.</p>
+
+        <h2>4. Direitos Autorais</h2>
+        <p>Todo o conteúdo deste site, incluindo logotipos, textos, fotografias dos imóveis e design, é de propriedade exclusiva de Augusto Narloch Imóveis ou de seus respectivos proprietários, sendo protegido pelas leis de direitos autorais. É expressamente proibida a cópia, reprodução ou distribuição não autorizada.</p>
+
+        <h2>5. Links de Terceiros</h2>
+        <p>Nosso site pode conter links para sites de terceiros (como o WhatsApp). Não nos responsabilizamos pelas práticas de privacidade ou conteúdo desses sites externos.</p>
+
+        <h2>6. Contato</h2>
+        <p>Para dúvidas relacionadas a estes termos ou sobre qualquer imóvel listado, entre em contato através do nosso WhatsApp: (41) 99568-3915.</p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  :global(html), :global(body) {
+    margin: 0 !important; padding: 0 !important;
+    background-color: #b2bfd0;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .legal-container {
+    padding: 120px 20px 100px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .legal-card {
+    background: #ffffff;
+    padding: 60px;
+    border-radius: 32px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+  }
+
+  .breadcrumb-nav { 
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 30px; 
+  }
+  .breadcrumb-nav a { color: #2563eb; text-decoration: none; }
+  .breadcrumb-nav .divider { color: #cbd5e1; }
+  .breadcrumb-nav .current { color: #0f172a; }
+
+  h1 {
+    font-size: 2.5rem;
+    color: #0f172a;
+    font-weight: 800;
+    margin: 0 0 10px 0;
+    letter-spacing: -0.02em;
+  }
+
+  .last-updated {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .legal-content h2 {
+    font-size: 1.4rem;
+    color: #0f172a;
+    margin: 35px 0 15px;
+    font-weight: 700;
+  }
+
+  .legal-content p {
+    line-height: 1.8;
+    color: #475569;
+    font-size: 1.05rem;
+    margin-bottom: 15px;
+  }
+
+  @media (max-width: 768px) {
+    .legal-container { padding-top: 100px; }
+    .legal-card { padding: 30px 20px; border-radius: 24px; }
+    h1 { font-size: 2rem; }
+  }
+</style>

@@ -1,0 +1,411 @@
+---
+// 1. Imports
+import Layout from '../layouts/Layout.astro'
+import Header from '../components/Header.astro'
+import ImovelCard from '../components/ImovelCard.astro'
+import Filters from '../components/Filters.astro'
+import { sanityClient } from 'sanity:client'
+import { allPropertiesQuery } from '../lib/queries'
+import { urlFor } from '../lib/image'
+
+const properties = await sanityClient.fetch(allPropertiesQuery)
+const featuredProperties = properties.filter(p => p.featured === true);
+const normalProperties = properties.filter(p => p.featured !== true);
+---
+
+<Layout title="Augusto Narloch">
+  <div class="site-texture"></div>
+  
+  <Header />
+
+  <main class="fade-in">
+    <section class="hero-premium">
+      <div class="hero-container">
+        
+        <div class="hero-content">
+          <h1>Onde a sua história <br/> <span class="text-serif">ganha um novo endereço.</span></h1>
+          
+          <p class="hero-description">
+            Não somos apenas uma lista de imóveis. Somos a ponte entre o seu momento atual e o espaço que você sempre planejou conquistar.
+          </p>
+        </div>
+
+        <div class="hero-filter-side">
+          <div class="glass-search-box">
+            <div class="search-box-header">
+              <h3>Encontre o seu imóvel</h3>
+            </div>
+            
+            <Filters properties={properties} />
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div id="no-results" class="section-container" style="display: none;">
+      <div class="empty-state-card">
+        <h3>Nenhum imóvel nessas características</h3>
+        <p>Tente ajustar sua busca para encontrar o imóvel ideal.</p>
+        <button id="btn-reset" class="btn-minimal">Limpar busca</button>
+      </div>
+    </div>
+
+    {featuredProperties.length > 0 && (
+      <section class="section-container property-section">
+        <div class="section-header-refined">
+          <div class="title-group">
+            <span class="label">Coleção</span>
+            <h2>Destaques Selecionados</h2>
+          </div>
+          <div class="line"></div>
+        </div>
+        <div class="grid">
+          {featuredProperties.map((property) => (
+            <ImovelCard
+              imovel={property}
+              imageUrl={property.mainImage ? urlFor(property.mainImage).width(800).url() : '/fallback-img.jpg'}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="section-container property-section">
+      <div class="section-header-refined">
+        <div class="title-group">
+          <span class="label">Portfólio</span>
+          <h2>Adicionados Recentemente</h2>
+        </div>
+        <div class="line"></div>
+      </div>
+      <div class="grid">
+        {normalProperties.map((property) => (
+          <ImovelCard
+            imovel={property}
+            imageUrl={property.mainImage ? urlFor(property.mainImage).width(800).url() : '/fallback-img.jpg'}
+          />
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <a href="https://wa.me/5541995683915" class="whatsapp-premium-minimal" target="_blank">
+    <div class="btn-content">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      <span>Falar no WhatsApp</span>
+    </div>
+    <div class="btn-shine"></div>
+  </a>
+</Layout>
+
+<style>
+  /* 0. RESET GLOBAL DA PÁGINA (Mata as listras brancas laterais pela raiz) */
+  :global(html), :global(body) {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: var(--bg-solid-gray) !important;
+    overflow-x: hidden;
+  }
+
+  /* TEXTURA E VARIÁVEIS BASE */
+  .site-texture {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999; opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* 1. CONFIGURAÇÕES GERAIS */
+  :root {
+    /* AQUI MUDAMOS O TOM: de um "quase branco" para um cinza suave elegante */
+    --bg-solid-gray: #b2bfd0; 
+    --accent-blue: #3b82f6;
+    --text-main: #0f172a;
+  }
+
+  main { 
+    background-color: var(--bg-solid-gray); 
+    min-height: 100vh;
+    overflow-x: hidden; 
+  }
+
+  main { 
+    background-color: var(--bg-solid-gray); 
+    min-height: 100vh;
+    /* Garante que nada transborde horizontalmente por causa do banner largo */
+    overflow-x: hidden; 
+  }
+
+  .hero-premium {
+    position: relative;
+    /* 1. DIMINUÍMOS O PADDING DO TOPO (de 120px para 60px) para subir o conteúdo */
+    padding: 60px 24px 100px; 
+    
+    width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+
+    background-image: 
+      linear-gradient(to right, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.2) 100%),
+      url('/hero-bg.png'); 
+      
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+    /* 2. AUMENTAMOS O CORTE DO TOPO (de 110% para 130%) */
+    /* Quanto maior esse número, mais a foto "sobe" e mais o topo é cortado */
+    background-position: center 100%; 
+    
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+
+  .hero-container { 
+    position: relative; 
+    z-index: 1; 
+    /* O conteúdo interno continua alinhado com o site, mas o fundo é largo */
+    max-width: 1300px; 
+    margin: 0 auto; 
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr; 
+    align-items: center;
+    gap: 60px;
+  }
+
+  /* 3. FILTRO COM MAIS TRANSPARÊNCIA E CONTRASTE */
+  .hero-filter-side { width: 100%; perspective: 1000px; }
+
+  .glass-search-box {
+    background: rgba(255, 255, 255, 0.05); /* Apenas 5% de branco */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 32px;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  }
+
+  .search-box-header h3 {
+    margin: 0; 
+    font-size: 1.2rem; 
+    font-weight: 800; 
+    /* Como o vidro agora é transparente, o texto precisa ser branco para ler em cima da foto */
+    color: #ffffff; 
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+/* 4. TEXTOS DO HERO (Agora com alto contraste) */
+  h1 {
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    line-height: 1.1; 
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: -1.5px;
+    
+    /* MÁGICA DO CONTRASTE: Sombra dupla. 
+       A primeira deixa a borda da letra nítida, a segunda cria um volume atrás dela */
+    text-shadow: 
+      0 4px 4px rgba(0, 0, 0, 0.6),
+      0 12px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .text-serif {
+    font-family: serif;
+    font-style: italic;
+    color: #60a5fa;
+    /* A parte em azul também ganha contraste extra para não sumir */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .hero-description {
+    font-size: 1.25rem; 
+    color: #f8fafc; /* Deixei um branco um pouco mais puro para facilitar a leitura */
+    max-width: 90%;
+    
+    /* Sombra mais curta e forte para textos menores */
+    text-shadow: 
+      0 4px 6px rgba(0, 0, 0, 0.6),
+      0 12px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  /* RESPONSIVO */
+  @media (max-width: 1024px) {
+    .hero-container { grid-template-columns: 1fr; gap: 40px; }
+    .hero-content { text-align: center; }
+    .glass-search-box { max-width: 550px; margin: 0 auto; }
+  }
+
+
+  /* CABEÇALHOS E GRIDS */
+  .section-container { max-width: 1300px; margin: 0 auto; padding: 60px 24px; }
+  .section-header-refined { display: flex; align-items: flex-end; gap: 30px; margin-bottom: 40px; }
+  .title-group .label { font-size: 11px; text-transform: uppercase; font-weight: 800; color: var(--accent-blue); letter-spacing: 2px; display: block; margin-bottom: 8px; }
+  .title-group h2 { font-size: 2rem; font-weight: 800; color: var(--text-main); margin: 0; }
+  .section-header-refined .line { height: 1px; flex-grow: 1; background: linear-gradient(to right, rgba(0,0,0,0.1), transparent); margin-bottom: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 40px; }
+
+  /* ESTADO VAZIO */
+  .empty-state-card { text-align: center; padding: 80px 20px; background: rgba(0,0,0,0.02); border-radius: 24px; border: 1px dashed rgba(0,0,0,0.1); }
+  .empty-state-card h3 { font-size: 1.4rem; margin-bottom: 8px; color: var(--text-main); }
+  .empty-state-card p { color: var(--text-soft); margin-bottom: 24px; }
+  .btn-minimal { padding: 12px 24px; background: var(--text-main); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+  .btn-minimal:hover { background: var(--accent-blue); }
+
+  /* WHATSAPP */
+  /* 5. BOTÃO WHATSAPP PREMIUM (Com a mesma lógica de animação do Header) */
+  .whatsapp-premium-minimal {
+    position: fixed;
+    bottom: 60px; right: 40px;
+    background: #25d366; /* Cor oficial do WhatsApp */
+    color: #ffffff;
+    padding: 14px 28px;
+    border-radius: 100px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    
+    /* Prepara para animação */
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    
+    /* Sombra mais suave e esverdeada para combinar */
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+    z-index: 1000;
+  }
+
+  /* Conteúdo interno alinhado */
+  .whatsapp-premium-minimal .btn-content {
+    display: flex; align-items: center; gap: 12px;
+    position: relative; z-index: 2;
+  }
+
+  /* Efeito de Brilho (O mesmo usado no Anunciar Imóvel) */
+  .whatsapp-premium-minimal .btn-shine {
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: all 0.6s ease;
+    z-index: 1;
+  }
+
+  /* EFEITOS DE HOVER: Movimento e Sombra */
+  .whatsapp-premium-minimal:hover {
+    transform: translateY(-5px) scale(1.03); /* Sobe e cresce sutilmente */
+    background: #128c7e; /* Verde mais escuro no hover */
+    box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4);
+  }
+
+  /* Ativa o brilho ao passar o mouse */
+  .whatsapp-premium-minimal:hover .btn-shine {
+    left: 100%;
+  }
+
+  .whatsapp-premium-minimal:active {
+    transform: translateY(-2px);
+  }
+
+  /* ANIMAÇÕES */
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+  .fade-in { animation: fadeIn 0.8s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* RESPONSIVO */
+  @media (max-width: 1024px) {
+    .hero-container { grid-template-columns: 1fr; gap: 40px; }
+    .hero-content { text-align: center; align-items: center; }
+    .hero-description { max-width: 100%; }
+    .glass-search-box { max-width: 600px; margin: 0 auto; }
+  }
+  @media (max-width: 768px) {
+    .hero-premium { padding: 40px 20px 60px; }
+    .glass-search-box { padding: 20px; }
+  }
+</style>
+
+<script>
+  // 1. Mapeia todos os elementos
+  const searchInput = document.getElementById('search') as HTMLInputElement;
+  const statusSelect = document.getElementById('filter-status') as HTMLSelectElement; // Novo
+  const citySelect = document.getElementById('filter-city') as HTMLSelectElement;
+  const bairroSelect = document.getElementById('filter-bairro') as HTMLSelectElement;
+  const priceSelect = document.getElementById('filter-price') as HTMLSelectElement;
+  const bedroomsSelect = document.getElementById('filter-bedrooms') as HTMLSelectElement;
+  
+  // 2. Mapeia os botões de limpar
+  const resetBtn = document.getElementById('btn-reset'); // Botão da tela de "Nenhum resultado"
+  const clearFiltersBtn = document.getElementById('clear-filters'); // Botão do painel de filtros
+  
+  const noResults = document.getElementById('no-results');
+  const cards = document.querySelectorAll('.property-item');
+  const sections = document.querySelectorAll('.property-section');
+
+  // 3. Função Principal de Filtragem
+  function filterProperties() {
+    const searchTerm = searchInput?.value.toLowerCase() || "";
+    const selectedCity = citySelect?.value || "";
+    const selectedStatus = statusSelect?.value || ""; // Novo
+    const selectedBairro = bairroSelect?.value || "";
+    const maxPrice = priceSelect?.value ? parseFloat(priceSelect.value) : Infinity;
+    const minBedrooms = bedroomsSelect?.value ? parseInt(bedroomsSelect.value) : 0;
+
+    let visibleInTotal = 0;
+
+    cards.forEach(card => {
+      const htmlCard = card as HTMLElement;
+      const title = htmlCard.querySelector('h3')?.innerText.toLowerCase() || "";
+      const city = htmlCard.getAttribute('data-cidade') || "";
+      const bairro = htmlCard.getAttribute('data-bairro') || "";
+      const preco = parseFloat(htmlCard.getAttribute('data-preco') || "0");
+      const quartos = parseInt(htmlCard.getAttribute('data-quartos') || "0");
+
+      const matchesSearch = title.includes(searchTerm);
+      const matchesCity = !selectedCity || city === selectedCity;
+      const matchesBairro = !selectedBairro || bairro === selectedBairro;
+      const matchesPrice = preco <= maxPrice;
+      const matchesBedrooms = quartos >= minBedrooms;
+
+      if (matchesCity && matchesSearch && matchesBairro && matchesPrice && matchesBedrooms) {
+        htmlCard.style.display = 'block';
+        visibleInTotal++;
+      } else {
+        htmlCard.style.display = 'none';
+      }
+    });
+
+    if (noResults) noResults.style.display = visibleInTotal === 0 ? 'block' : 'none';
+
+    sections.forEach(section => {
+      const hasVisibleCards = section.querySelectorAll('.property-item[style="display: block;"]').length > 0;
+      (section as HTMLElement).style.display = hasVisibleCards ? 'block' : 'none';
+    });
+  }
+
+  // 4. Dispara o filtro toda vez que o usuário digitar ou selecionar algo
+  [searchInput, citySelect, statusSelect, bairroSelect, priceSelect, bedroomsSelect].forEach(el => {
+    el?.addEventListener('input', filterProperties);
+  });
+
+  // 5. Função para Limpar Tudo
+  const clearAllFilters = () => {
+    if (searchInput) searchInput.value = '';
+    if (statusSelect) statusSelect.value = '';
+    if (citySelect) citySelect.value = '';
+    if (bairroSelect) bairroSelect.value = '';
+    if (priceSelect) priceSelect.value = '';
+    if (bedroomsSelect) bedroomsSelect.value = '';
+    
+    // Roda a filtragem novamente com tudo vazio (mostra tudo)
+    filterProperties();
+  };
+
+  // 6. Conecta a função de limpar aos dois botões
+  resetBtn?.addEventListener('click', clearAllFilters);
+  clearFiltersBtn?.addEventListener('click', clearAllFilters);
+</script>
