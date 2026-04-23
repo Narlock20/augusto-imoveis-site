@@ -58,8 +58,11 @@
             Araucária, PR
           </li>
           <li class="creci-tag">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 21v-4M16 21v-4"/></svg>
-            CRECI-PR F57121
+            <a href="https://www.crecipr.gov.br/pesquisa-credenciados" target="_blank" title="Validar registro no site do CRECI-PR" class="creci-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 21v-4M16 21v-4"/></svg>
+              <span>CRECI-PR F57121</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="external-icon"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
           </li>
         </ul>
       </div>
@@ -81,10 +84,11 @@
 <style>
   /* Base do Footer */
   .site-footer {
-    background-color: #0f172a; /* Azul marinho escuro, combinando com o card lateral */
+    background-color: #0f172a; 
     color: #cbd5e1;
     position: relative;
-    margin-top: 100px; /* Espaço para o CTA "flutuar" */
+    /* Aumentei a margem base de 100px para 150px para dar mais respiro */
+    margin-top: 150px; 
     font-family: 'Inter', system-ui, sans-serif;
   }
 
@@ -93,7 +97,7 @@
     max-width: 1300px;
     margin: 0 auto;
     padding: 0 20px;
-    transform: translateY(-50%); /* Faz a caixa flutuar metade para fora do footer */
+    transform: translateY(-50%); 
     position: relative;
     z-index: 20;
   }
@@ -145,7 +149,7 @@
   /* Grid Principal do Footer */
   .footer-main {
     max-width: 1300px;
-    margin: -30px auto 0; /* Compensa o espaço do CTA flutuante */
+    margin: -30px auto 0; 
     padding: 0 20px 60px;
   }
 
@@ -159,7 +163,7 @@
     height: 50px;
     width: auto;
     margin-bottom: 24px;
-    filter: brightness(0) invert(1); /* Deixa a logo branca para destacar no fundo escuro */
+    filter: brightness(0) invert(1); 
   }
 
   .brand-text {
@@ -193,8 +197,8 @@
   }
 
   .footer-links a:hover {
-    color: #60a5fa; /* Azul claro ao passar o mouse */
-    padding-left: 5px; /* Leve animação para a direita */
+    color: #60a5fa; 
+    padding-left: 5px; 
   }
 
   .contact-list {
@@ -255,7 +259,7 @@
     color: #ffffff;
   }
 
-  /* Responsivo */
+  /* Responsivo - Onde a mágica acontece */
   @media (max-width: 1024px) {
     .footer-grid {
       grid-template-columns: 1fr 1fr;
@@ -270,14 +274,57 @@
   }
 
   @media (max-width: 768px) {
+    .site-footer {
+      /* MÁGICA: Como a caixa do CTA fica muito alta no celular, empurramos o footer todo mais para baixo para ele não esmagar o conteúdo de cima */
+      margin-top: 220px; 
+    }
+    
     .footer-grid {
       grid-template-columns: 1fr;
+      gap: 40px;
     }
+    
+    .footer-main {
+      /* Ajuste extra para compensar a caixa gigante do mobile */
+      margin: -60px auto 0; 
+    }
+
     .bottom-content {
       flex-direction: column;
       gap: 16px;
       text-align: center;
     }
     .cta-text h2 { font-size: 1.6rem; }
+  }
+
+  .creci-tag {
+    margin-top: 10px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  /* NOVO: Estilizando o link do CRECI no rodapé */
+  .creci-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+
+  .creci-link:hover {
+    color: #60a5fa; /* Fica azul ao passar o mouse */
+  }
+
+  .creci-link .external-icon {
+    margin-left: 4px;
+    opacity: 0.5; /* Deixa a setinha mais discreta */
+    transition: opacity 0.3s ease;
+  }
+
+  .creci-link:hover .external-icon {
+    opacity: 1; /* Acende a setinha no hover */
   }
 </style>

@@ -1,0 +1,176 @@
+---
+// src/components/HeroSplit.astro
+---
+
+<section class="hero-split">
+  <a href="/compre" class="split-card sale">
+    <div class="overlay"></div>
+    <div class="content">
+      <span class="tag">Investimento & Moradia</span>
+      <h2>Quero Comprar</h2>
+      <p>Casas, apartamentos e terrenos com curadoria exclusiva em Araucária.</p>
+      <div class="btn-fake">
+        Explorar Vendas 
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+    </div>
+  </a>
+
+  <a href="/alugue" class="split-card rent">
+    <div class="overlay"></div>
+    <div class="content">
+      <span class="tag">Praticidade & Conforto</span>
+      <h2>Quero Alugar</h2>
+      <p>As melhores opções de locação residencial e comercial para você.</p>
+      <div class="btn-fake">
+        Ver Aluguéis 
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+    </div>
+  </a>
+</section>
+
+<style>
+  .hero-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 70vh;
+    gap: 4px;
+    background: #ffffff;
+    border-radius: 32px;
+    overflow: hidden;
+    margin: 20px 24px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  }
+
+  .split-card {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 60px;
+    text-decoration: none;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #f8fafc;
+  }
+
+  /* Brilho da imagem mantido alto para clareza */
+  .sale { 
+    background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070') center/cover;
+    filter: brightness(1.1) contrast(1.05);
+  }
+  .rent { 
+    background: url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070') center/cover; 
+    filter: brightness(1.1) contrast(1.05);
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top, 
+      rgba(15, 23, 42, 0.6) 0%, 
+      transparent 100%
+    );
+    transition: all 0.4s ease;
+  }
+
+  .content {
+    position: relative;
+    z-index: 10;
+    color: white;
+    max-width: 450px;
+    transition: transform 0.4s ease;
+  }
+
+  /* Tag com brilho próprio */
+  .tag {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #00e5ff; 
+    margin-bottom: 16px;
+    display: block;
+    /* Sombra escura de contorno para o azul brilhar */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8);
+  }
+
+  /* --- O EFEITO DE CONTORNO (OUTLINE) --- */
+  h2 { 
+    font-size: 3.2rem; 
+    font-weight: 900; 
+    margin: 0 0 16px; 
+    letter-spacing: -1.5px;
+    line-height: 1;
+    color: #ffffff;
+    
+    /* Múltiplas sombras para criar o contorno 360º */
+    text-shadow: 
+      2px 2px 0px rgba(0,0,0,0.8),
+      -1px -1px 0px rgba(0,0,0,0.8),  
+      1px -1px 0px rgba(0,0,0,0.8),
+      -1px 1px 0px rgba(0,0,0,0.8),
+      2px 2px 15px rgba(0,0,0,0.5); /* Sombra suave extra para profundidade */
+  }
+
+  p { 
+    font-size: 1.15rem; 
+    color: #ffffff; 
+    line-height: 1.6; 
+    margin-bottom: 32px;
+    font-weight: 700; /* Mais peso para ajudar no contorno */
+    
+    /* Contorno mais sutil para o parágrafo não ficar "pesado" */
+    text-shadow: 
+      1px 1px 1px rgba(0,0,0,0.9),
+      -1px -1px 1px rgba(0,0,0,0.9);
+  }
+
+  .btn-fake {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 28px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 100px;
+    font-weight: 700;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+
+  .split-card:hover { 
+    filter: brightness(1.15); 
+  }
+
+  .split-card:hover .overlay { 
+    background: linear-gradient(
+      to top, 
+      rgba(37, 99, 235, 0.5) 0%, 
+      transparent 100%
+    ); 
+  }
+  
+  .split-card:hover .content {
+    transform: translateY(-5px);
+  }
+
+  .split-card:hover .btn-fake { 
+    background: #ffffff; 
+    color: #0f172a; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  }
+
+  @media (max-width: 900px) {
+    .hero-split { grid-template-columns: 1fr; min-height: 100vh; margin: 10px; }
+    .split-card { padding: 40px; height: 50vh; }
+    h2 { font-size: 2.6rem; }
+  }
+</style>

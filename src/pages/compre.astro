@@ -3,6 +3,7 @@
 import Layout from '../layouts/Layout.astro'
 import Header from '../components/Header.astro'
 import ImovelCard from '../components/ImovelCard.astro'
+import Filters from '../components/Filters.astro' // 1. Importe o Filtro
 
 import { sanityClient } from 'sanity:client'
 import { allPropertiesQuery } from '../lib/queries'
@@ -31,8 +32,10 @@ const propertiesForSale = allProperties.filter(p => {
     </section>
 
     <section class="section-container">
+      <Filters properties={propertiesForSale} tipo="venda" />
+
       {propertiesForSale.length > 0 ? (
-        <div class="grid">
+        <div class="grid" id="properties-grid">
           {propertiesForSale.map((property) => (
             <ImovelCard
               imovel={property}
@@ -79,17 +82,24 @@ const propertiesForSale = allProperties.filter(p => {
     text-align: center;
   }
 
+  /* Estilo do Cabeçalho Interno */
   .internal-header h1 {
-    font-size: 3rem;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
     font-weight: 900;
-    color: #0f172a;
+    color: #0f172a; /* O Azul Escuro (Navy) que você pediu */
     margin-bottom: 12px;
     letter-spacing: -1px;
+    text-shadow: none; /* Mantendo a cor sólida e limpa como na imagem */
   }
 
   .internal-header p {
-    font-size: 1.2rem;
-    color: #475569;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a; /* Branco Puro */
+    
+    
+    max-width: 800px;
+    margin: 0 auto;
   }
 
   .section-container { max-width: 1300px; margin: 0 auto; padding: 0 24px 80px; }
@@ -97,7 +107,7 @@ const propertiesForSale = allProperties.filter(p => {
   
   .empty-state-card { text-align: center; padding: 80px 20px; background: rgba(255,255,255,0.3); border-radius: 24px; border: 1px dashed rgba(0,0,0,0.1); }
   .empty-state-card h3 { font-size: 1.4rem; margin-bottom: 8px; color: #0f172a; }
-  .empty-state-card p { color: #64748b; }
+  .empty-state-card p { color: #475569; }
   
   .fade-in { animation: fadeIn 0.8s ease-out; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }

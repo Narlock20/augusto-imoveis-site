@@ -26,12 +26,34 @@ const statusArray = Array.isArray(imovel.status)
 
 const isVenda = statusArray.includes('venda');
 const isAluguel = statusArray.includes('aluguel') || statusArray.includes('locação');
+const isIndisponivel = statusArray.includes('vendido') || statusArray.includes('alugado');
 
 const mainRawUrl = urlFor(imovel.mainImage).url();
 const mainOptimized = getCloudinaryUrl(mainRawUrl, 1200, 800);
 const mainFullSize = getCloudinaryUrl(mainRawUrl, 1920, 1080);
 
 const tipoFisico = imovel.propertyType ? imovel.propertyType : 'Imóvel';
+
+// --- LÓGICA DE SEO (SCHEMA.ORG) ---
+const priceForSchema = isVenda && imovel.priceVenda 
+  ? imovel.priceVenda 
+  : (isAluguel && imovel.priceAluguel ? imovel.priceAluguel : (imovel.price || 0));
+
+const schemaGoogle = {
+  "@context": "https://schema.org",
+  "@type": "RealEstateListing",
+  "name": `${imovel.title} | ${imovel.neighborhood}`,
+  "description": imovel.description || `${tipoFisico} em ${imovel.neighborhood}. Confira agora!`,
+  "image": mainFullSize,
+  "url": Astro.url.href, 
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "BRL",
+    "price": priceForSchema,
+    "availability": isIndisponivel ? "https://schema.org/SoldOut" : "https://schema.org/InStock",
+    "url": Astro.url.href
+  }
+};
 ---
 
 <Layout 
@@ -39,6 +61,8 @@ const tipoFisico = imovel.propertyType ? imovel.propertyType : 'Imóvel';
   description={`${tipoFisico} em ${imovel.neighborhood}. Confira agora!`}
   image={mainFullSize}
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(schemaGoogle)} />
+
   <link rel="stylesheet" href="https://unpkg.com/photoswipe@5.4.3/dist/photoswipe.css">
   <Header />
 
@@ -191,14 +215,46 @@ const tipoFisico = imovel.propertyType ? imovel.propertyType : 'Imóvel';
 
           </div>
 
-          <div class="cta-section">
-            <p>Atendimento exclusivo. Garantimos uma transação segura e sem burocracia para você.</p>
-            <a href={`https://wa.me/5541995683915?text=Olá! Vi o imóvel "${imovel.title}" e gostaria de agendar uma visita.`} 
-               class="whatsapp-btn" target="_blank">
-               Falar com Especialista
-            </a>
+            <div class="expert-profile">
+              <div class="profile-header">
+                <div class="avatar-circle">
+                  <img src="/augusto-perfil.jpeg" alt="Augusto Narloch" class="expert-photo" />
+                </div>
+                <div class="profile-titles">
+                  <strong>Augusto Narloch</strong>
+                  <a href="https://www.crecipr.gov.br/pesquisa-credenciados" target="_blank" title="Validar registro no site do CRECI-PR">
+                    CRECI-PR F57121
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  </a>
+                </div>
+              </div>
+              
+              <div class="profile-bio">
+                Corretor e especialista. Cuidamos de toda a burocracia para garantir a segurança do seu patrimônio.
+              </div>
+
+              <ul class="trust-features">
+                <li>
+                  <div class="check-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  Análise de matrícula inclusa
+                </li>
+                <li>
+                  <div class="check-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  Contrato blindado e seguro
+                </li>
+                <li>
+                  <div class="check-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  Acompanhamento até as chaves
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
       </aside>
     </div>
   </main>
@@ -246,25 +302,24 @@ const tipoFisico = imovel.propertyType ? imovel.propertyType : 'Imóvel';
   
   .mosaic-grid { 
     display: grid; 
-    grid-template-columns: 2fr 1fr; /* A foto principal ocupa 2/3 da tela */
-    gap: 20px; /* Aumentei o espaço entre elas para destacar que são quadros soltos */
-    /* REMOVIDO: height: 520px e overflow: hidden. Agora elas são livres! */
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
   }
 
   .main-frame { 
     position: relative; 
-    border-radius: 28px; /* Arredondamento suave e moderno */
+    border-radius: 28px;
     overflow: hidden; 
     display: block;
     cursor: zoom-in;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.08); /* Sombra própria para flutuar */
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
     background: #cbd5e1; 
-    aspect-ratio: 16 / 10; /* Garante um formato de tela de cinema, independente do monitor */
+    aspect-ratio: 16 / 10;
   }
 
   .side-frames { 
     display: grid; 
-    grid-template-rows: 1fr 1fr; /* Divide o espaço lateral exatamente ao meio */
+    grid-template-rows: 1fr 1fr;
     gap: 20px; 
   }
 
@@ -276,13 +331,12 @@ const tipoFisico = imovel.propertyType ? imovel.propertyType : 'Imóvel';
     cursor: zoom-in;
     box-shadow: 0 15px 35px rgba(0,0,0,0.08);
     background: #cbd5e1;
-    /* Não precisa de altura, ele preenche o espaço de "1fr" deixado pela foto principal */
   }
 
   .main-frame img, .side-item img { 
     width: 100%; 
     height: 100%; 
-    object-fit: cover; /* Faz a foto respeitar a moldura sem distorcer */
+    object-fit: cover;
     transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
   
@@ -327,7 +381,6 @@ const tipoFisico = imovel.propertyType ? imovel.propertyType : 'Imóvel';
     .editorial-gallery { padding-top: 100px; }
     .mosaic-grid { 
       grid-template-columns: 1fr; 
-      /* No celular, volta a ter proporção de foto única */
     }
     .main-frame { aspect-ratio: 4 / 3; }
     .side-frames { display: none; }
@@ -339,7 +392,7 @@ const tipoFisico = imovel.propertyType ? imovel.propertyType : 'Imóvel';
   .content-wrapper { 
     max-width: 1300px; margin: 0 auto; padding: 0 20px; 
     display: grid; 
-    grid-template-columns: minmax(0, 1fr) 400px; /* Impede esmagamento */
+    grid-template-columns: minmax(0, 1fr) 400px;
     gap: 40px; 
     align-items: start;
   }
@@ -354,7 +407,7 @@ const tipoFisico = imovel.propertyType ? imovel.propertyType : 'Imóvel';
   /* CARD ESCURO PREMIUM (SIDEBAR) */
   .premium-card {
     position: sticky; top: 120px;
-    background: #0f172a; /* Azul Marinho Escuro */
+    background: #0f172a; 
     color: white;
     padding: 45px;
     border-radius: 32px;
@@ -440,47 +493,136 @@ const tipoFisico = imovel.propertyType ? imovel.propertyType : 'Imóvel';
   
   .pill-icon {
     width: 24px; height: 24px;
-    background: #ecfdf5; /* Fundo verde super claro */
+    background: #ecfdf5;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
   }
   
   .pill-icon svg { 
     width: 12px; height: 12px; 
-    color: #10b981; /* Verde esmeralda */
+    color: #10b981;
   }
+
   /* =========================================
      SIDEBAR ESCURA (PREÇOS)
   ========================================= */
-  .price-section { margin-bottom: 35px; }
+  .price-section { margin-bottom: 10px; }
   .price-row { display: flex; flex-direction: column; gap: 6px; }
   .p-label { font-size: 12px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
   .p-value { font-size: 2.4rem; font-weight: 800; color: #ffffff; letter-spacing: -0.02em;}
   .p-value small { font-size: 1.2rem; color: #94a3b8; font-weight: 600; }
 
-  .cta-section p { font-size: 14.5px; color: #cbd5e1; line-height: 1.6; margin-bottom: 24px; font-weight: 400;}
-  
-  .whatsapp-btn {
-    display: block; text-align: center; 
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); 
-    color: #fff; text-decoration: none;
-    padding: 20px; border-radius: 16px; font-weight: 700; font-size: 16px; 
-    transition: 0.3s; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+/* =========================================
+     PERFIL DO ESPECIALISTA (NOVO BLOCO)
+  ========================================= */
+  .expert-profile {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
-  .whatsapp-btn:hover { background: #1d4ed8; transform: translateY(-3px); box-shadow: 0 12px 25px rgba(37, 99, 235, 0.4); }
 
-  .trust-footer { 
-    margin-top: 30px; display: flex; justify-content: space-between; align-items: center; 
-    padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); 
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
   }
-  .ref-tag { font-size: 12px; color: #64748b; font-weight: 700; }
-  .trust-tag { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #10b981; }
+
+  .avatar-circle {
+    width: 54px;
+    height: 54px;
+    background: rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(37, 99, 235, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #60a5fa;
+    /* ADICIONADO: Esconde o que passar do círculo */
+    overflow: hidden; 
+  }
+
+  /* ADICIONADO: A classe que controla o enquadramento da sua foto */
+  .expert-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%; /* Se cortar muito a cabeça, mude para "center 20%" */
+    display: block;
+
+    image-rendering: -webkit-optimize-contrast; /* Força o Chrome a não borrar */
+    transform: translateZ(0); /* Ativa a placa de vídeo do PC para renderizar a foto */
+    backface-visibility: hidden;
+  }
+
+  .profile-titles strong {
+    display: block;
+    font-size: 1.15rem;
+    color: #ffffff;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  /* Estilo do Link do CRECI */
+  .profile-titles a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: #60a5fa; /* Azul claro para indicar que é clicável */
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: 0.2s ease;
+  }
+
+  .profile-titles a:hover {
+    color: #93c5fd; /* Fica um pouco mais claro ao passar o mouse */
+    text-decoration: underline;
+  }
+
+  .profile-bio {
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+
+  .trust-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .trust-features li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    color: #f1f5f9;
+    font-weight: 500;
+  }
+
+  .check-icon {
+    width: 20px;
+    height: 20px;
+    background: #10b981;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0f172a;
+    flex-shrink: 0;
+  }
 
   /* =========================================
      RESPONSIVO (TRAVAS DE SEGURANÇA)
   ========================================= */
   @media (max-width: 1150px) {
-    /* Desarma a barra lateral para baixo em telas médias */
     .content-wrapper { grid-template-columns: 1fr; }
     .premium-card { position: static; margin-bottom: 40px; }
     .tech-strip { grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 24px; }

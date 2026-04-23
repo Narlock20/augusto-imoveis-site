@@ -1,38 +1,38 @@
 ---
 // src/components/Filters.astro
-const { properties } = Astro.props;
+const { properties, tipo } = Astro.props; // 'venda' ou 'aluguel'
 
-// Extrai cidades e bairros únicos dinamicamente
-const cities = [...new Set(properties.map(p => p.city))].filter(Boolean).sort();
-const neighborhoods = [...new Set(properties.map(p => p.neighborhood))].filter(Boolean).sort();
+const propertiesData = properties.map((p, index) => ({
+  index,
+  city: p.city || '',
+  neighborhood: p.neighborhood || '',
+  priceVenda: Number(p.priceVenda) || 0,
+  priceAluguel: Number(p.priceAluguel) || 0,
+  bedrooms: Number(p.bedrooms) || 0,
+  status: Array.isArray(p.status) ? p.status.map(s => s.toLowerCase().trim()) : [],
+  title: (p.title || '').toLowerCase(),
+  description: (p.description || '').toLowerCase()
+}));
 ---
+
+<div 
+  id="filter-metadata" 
+  data-props={JSON.stringify(propertiesData)} 
+  data-page-type={tipo} 
+  style="display:none;"
+></div>
 
 <section class="filters-container">
   <div class="filter-group search-box">
-    <label for="search">Busca por palavras chave</label>
+    <label for="search">Busca livre</label>
     <div class="input-wrapper">
-      <svg class="search-icon" width="16" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <input type="text" id="search" placeholder="Ex: Casa 3 quartos..." />
+      <input type="text" id="search" placeholder="Ex: sacada, piscina..." />
     </div>
   </div>
 
-  <div class="filter-group">
-    <label for="filter-city">Cidade</label>
-    <select id="filter-city">
-      <option value="">Todas as cidades</option>
-      {cities.map(city => (
-        <option value={city}>{city.charAt(0).toUpperCase() + city.slice(1)}</option>
-      ))}
-    </select>
-  </div>
-
-  <div class="filter-group">
-    <label for="filter-bairro">Bairro</label>
-    <select id="filter-bairro">
-      <option value="">Todos os bairros</option>
-      {neighborhoods.map(bairro => (
-        <option value={bairro}>{bairro}</option>
-      ))}
+  <div class="filter-group" style="display: none;">
+    <select id="filter-status">
+      <option value={tipo} selected>{tipo}</option>
     </select>
   </div>
 
@@ -40,10 +40,20 @@ const neighborhoods = [...new Set(properties.map(p => p.neighborhood))].filter(B
     <label for="filter-price">Preço máximo</label>
     <select id="filter-price">
       <option value="">Qualquer preço</option>
-      <option value="200000">Até R$ 200 mil</option>
-      <option value="400000">Até R$ 400 mil</option>
-      <option value="600000">Até R$ 600 mil</option>
-      <option value="1000000">Até R$ 1 milhão</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="filter-city">Cidade</label>
+    <select id="filter-city">
+      <option value="">Todas as cidades</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="filter-bairro">Bairro</label>
+    <select id="filter-bairro">
+      <option value="">Todos os bairros</option>
     </select>
   </div>
 
@@ -51,161 +61,239 @@ const neighborhoods = [...new Set(properties.map(p => p.neighborhood))].filter(B
     <label for="filter-bedrooms">Quartos</label>
     <select id="filter-bedrooms">
       <option value="">Qualquer número</option>
-      <option value="1">1+ Quartos</option>
-      <option value="2">2+ Quartos</option>
-      <option value="3">3+ Quartos</option>
     </select>
   </div>
-
-  <div class="filter-group">
-    <label for="filter-status">Finalidade</label>
-    <select id="filter-status">
-        <option value="">Venda ou Aluguel</option>
-        <option value="venda">Comprar</option>
-        <option value="aluguel">Alugar</option>
-    </select>
-    </div>
 
   <button type="button" id="clear-filters" class="btn-clear">Limpar Filtros</button>
 </section>
 
+<script>
+  const meta = document.getElementById('filter-metadata');
+  const props = JSON.parse(meta.dataset.props);
+  const pageType = meta.dataset.pageType; // 'venda' ou 'aluguel'
+  const cards = document.querySelectorAll('.property-item');
+  
+  const selects = {
+    search: document.getElementById('search'),
+    status: document.getElementById('filter-status'),
+    price: document.getElementById('filter-price'),
+    city: document.getElementById('filter-city'),
+    bairro: document.getElementById('filter-bairro'),
+    rooms: document.getElementById('filter-bedrooms')
+  };
+
+  const priceRanges = {
+    venda: [
+      { l: 'Até R$ 300 mil', v: 300000 },
+      { l: 'Até R$ 500 mil', v: 500000 },
+      { l: 'Até R$ 750 mil', v: 750000 },
+      { l: 'Até R$ 1 milhão', v: 1000000 },
+      { l: 'Acima de 1 milhão', v: 99999999 }
+    ],
+    aluguel: [
+      { l: 'Até R$ 1.500', v: 1500 },
+      { l: 'Até R$ 2.500', v: 2500 },
+      { l: 'Até R$ 4.000', v: 4000 },
+      { l: 'Acima de R$ 4.000', v: 999999 }
+    ]
+  };
+
+  function update() {
+    const f = {
+      search: selects.search.value.toLowerCase(),
+      status: pageType, // Força o status da página atual
+      city: selects.city.value,
+      bairro: selects.bairro.value,
+      price: selects.price.value ? parseInt(selects.price.value) : Infinity,
+      rooms: selects.rooms.value ? parseInt(selects.rooms.value) : 0
+    };
+
+    props.forEach((p, i) => {
+      const currentPrice = pageType === 'aluguel' ? p.priceAluguel : p.priceVenda;
+      
+      const match = 
+        (p.title.includes(f.search) || p.description.includes(f.search)) &&
+        (!f.city || p.city === f.city) &&
+        (!f.bairro || p.neighborhood === f.bairro) &&
+        (currentPrice > 0 && currentPrice <= f.price) &&
+        (p.bedrooms >= f.rooms);
+
+      if (cards[i]) cards[i].style.display = match ? 'flex' : 'none';
+    });
+
+    updateOptions(f);
+  }
+
+  function updateOptions(f) {
+    // Cidade
+    const avCities = [...new Set(props.map(p => p.city))].filter(Boolean).sort();
+    renderSelect(selects.city, avCities, "Todas as cidades");
+
+    // Bairro
+    const avBairros = [...new Set(props.filter(p => !f.city || p.city === f.city).map(p => p.neighborhood))].filter(Boolean).sort();
+    renderSelect(selects.bairro, avBairros, "Todos os bairros");
+
+    // Quartos
+    const avRooms = [...new Set(props.map(p => p.bedrooms))].filter(n => n > 0).sort();
+    renderRooms(avRooms);
+
+    // Preços (Sempre baseado no pageType)
+    renderPrices();
+  }
+
+  function renderSelect(el, items, def) {
+    const curr = el.value;
+    el.innerHTML = `<option value="">${def}</option>`;
+    items.forEach(i => {
+      const opt = document.createElement('option');
+      opt.value = i; opt.textContent = i;
+      if (i === curr) opt.selected = true;
+      el.appendChild(opt);
+    });
+  }
+
+  function renderRooms(items) {
+    const curr = selects.rooms.value;
+    selects.rooms.innerHTML = '<option value="">Qualquer número</option>';
+    [1, 2, 3, 4].forEach(n => {
+      if (items.some(available => available >= n)) {
+        const opt = document.createElement('option');
+        opt.value = n; opt.textContent = `${n}+ Quartos`;
+        if (n.toString() === curr) opt.selected = true;
+        selects.rooms.appendChild(opt);
+      }
+    });
+  }
+
+  function renderPrices() {
+    const curr = selects.price.value;
+    selects.price.innerHTML = '<option value="">Qualquer preço</option>';
+    
+    priceRanges[pageType].forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r.v; opt.textContent = r.l;
+      if (r.v.toString() === curr) opt.selected = true;
+      selects.price.appendChild(opt);
+    });
+  }
+
+  Object.values(selects).forEach(el => el && el.addEventListener('input', update));
+  document.getElementById('clear-filters').addEventListener('click', () => {
+    Object.values(selects).forEach(el => el && (el.value = ""));
+    update();
+  });
+
+  update();
+</script>
+
 <style>
-/* 1. LAYOUT DO CONTAINER (Totalmente invisível agora) */
+  /* 1. CONTAINER DO FILTRO (O "Taboleiro") */
   .filters-container {
     display: grid;
-    grid-template-columns: 1fr 1fr; 
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 20px;
-    background: transparent !important; /* Força a remoção de qualquer fundo sólido */
-    border: none !important; /* Remove qualquer borda sólida que tenha ficado */
-    padding: 0 !important; /* Removemos o padding interno para colar no vidro */
-    box-shadow: none !important; 
-    margin-bottom: 0;
+    padding: 32px;
+    background: rgba(255, 255, 255, 0.4); /* Vidro branco mais visível */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+    margin-bottom: 50px;
   }
 
-  /* Busca Livre ocupa a linha toda */
+  /* Ajuste para a Busca Livre ocupar mais espaço se necessário */
   .search-box {
-    grid-column: 1 / -1;
+    grid-column: span 2;
   }
 
+  /* 2. GRUPOS E RÓTULOS */
   .filter-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
   }
 
-  /* Rótulos dos campos (Bairro, Preço, etc) agora em branco para dar contraste */
   label {
     font-size: 11px;
-    font-weight: 700;
-    color: #ffffff;
+    font-weight: 800;
+    color: #0f172a; /* Azul quase preto para leitura perfeita */
     text-transform: uppercase;
-    letter-spacing: 1px;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    letter-spacing: 1.5px;
+    padding-left: 4px;
   }
 
-/* CAMPOS DE VIDRO (A transparência real) */
+  /* 3. CAMPOS (SELECTS E INPUTS) */
   input, select {
     width: 100%;
-    
-    /* ESSA É A LINHA QUE CORRIGE O VAZAMENTO */
-    box-sizing: border-box; 
-    
+    box-sizing: border-box;
     padding: 14px 16px;
     border-radius: 12px;
     
-    background: rgba(255, 255, 255, 0.7) !important; 
-    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    /* Fundo branco sólido ou quase sólido para garantir contraste */
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
     
     font-size: 14px;
     color: #0f172a;
-    font-weight: 500;
+    font-weight: 600;
     font-family: inherit;
-    transition: all 0.3s ease;
-    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    appearance: none; /* Remove a seta padrão do navegador */
   }
 
-
-  .input-wrapper { 
-    position: relative; 
-    width: 100%; 
-    box-sizing: border-box; /* Adicione aqui também por segurança */
-  }
-
-  .search-icon {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #94a3b8;
-  }
-
-  input#search {
-    padding-left: 44px; /* Abre espaço para o ícone */
-  }
-
-  /* Seta Customizada para os Selects */
+  /* Seta customizada para os Selects (Elegante e discreta) */
   select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 16px center;
     background-size: 16px;
     padding-right: 40px;
-    cursor: pointer;
   }
 
-  /* O EFEITO FOCUS (Brilho Azul) */
+  /* EFEITO DE FOCO (Destaque Azul) */
   input:focus, select:focus {
     outline: none;
-    border-color: #2563eb;
+    border-color: #2563eb !important;
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    transform: translateY(-2px);
   }
 
-  input::placeholder {
-    color: #94a3b8;
-    font-weight: 400;
-  }
-
-  /* 4. BOTÃO DE LIMPAR (GHOST BUTTON COM MOVIMENTO) */
+  /* 4. BOTÃO DE LIMPAR (Estilo Ghost Button) */
   .btn-clear {
     grid-column: 1 / -1;
-    margin-top: 12px;
-    padding: 14px;
-    
-    /* Design limpo em vidro */
-    background: rgba(255, 255, 255, 0.05); 
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #f8fafc; /* Branco suave para dar contraste */
-    
+    margin-top: 10px;
+    padding: 16px;
+    background: rgba(15, 23, 42, 0.05);
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    color: #0f172a;
     border-radius: 12px;
     font-weight: 700;
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
-    
-    /* A MÁGICA DA SUAVIDADE: cubic-bezier */
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
   }
 
-  /* EFEITOS DE HOVER: Micro-interação */
   .btn-clear:hover {
-    background: rgba(255, 255, 255, 0.15); /* Vidro mais visível */
+    background: #0f172a;
     color: #ffffff;
-    transform: translateY(-2px); /* Sobe sutilmente, como os outros botões */
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
   }
 
-  .btn-clear:active {
-    transform: translateY(-1px);
-  }
-
-  /* 5. RESPONSIVIDADE PARA CELULAR */
-  @media (max-width: 600px) {
+  /* RESPONSIVIDADE */
+  @media (max-width: 768px) {
     .filters-container {
-      grid-template-columns: 1fr; /* Tudo empilhado no celular */
-      gap: 16px;
+      grid-template-columns: 1fr 1fr;
+      padding: 20px;
     }
+    .search-box { grid-column: 1 / -1; }
+  }
+
+  @media (max-width: 480px) {
+    .filters-container { grid-template-columns: 1fr; }
   }
 </style>

@@ -4,128 +4,227 @@ import Header from '../components/Header.astro';
 ---
 
 <Layout 
-  title="Serviços e Assessoria Documental | Augusto Narloch"
-  description="Assessoria especializada em regularização de imóveis, contratos de gaveta e análise de matrículas em Araucária."
+  title="Assessoria e Gestão Documental | Augusto Narloch"
+  description="Procedimentos técnicos de regularização, análise de riscos e formalização de contratos em Araucária."
 >
+  <div class="site-texture"></div>
   <Header />
 
-  <main class="services-container">
-    <div class="breadcrumb-nav">
-      <a href="/">Início</a> <span class="divider">/</span> <span class="current">Serviços</span>
-    </div>
+  <main class="services-page fade-in">
+    <nav class="breadcrumb-nav">
+      <div class="container">
+        <a href="/">Início</a> <span class="divider">/</span> <span class="current">Serviços</span>
+      </div>
+    </nav>
 
     <header class="services-header">
-      <span class="subtitle">Especialista em Documentação</span>
-      <h1>Soluções Imobiliárias Completas</h1>
-      <p>Muito além da compra e venda, oferecemos segurança jurídica e suporte técnico para que seu patrimônio esteja sempre regularizado.</p>
+      <div class="container">
+        <span class="subtitle">Especialista em Documentação</span>
+        <h1>Serviços e Assessoria Documental</h1>
+        <p>Procedimentos técnicos de regularização, análise de riscos e formalização de trâmites imobiliários em Araucária e região.</p>
+      </div>
     </header>
 
-    <div class="services-grid">
-      <div class="service-card">
-        <div class="service-icon">📜</div>
-        <h3>Análise de Matrículas</h3>
-        <p>Análise técnica detalhada da certidão de inteiro teor para identificar ônus, averbações pendentes ou possíveis riscos na transação.</p>
-      </div>
+    <section class="section-container">
+      <div class="services-grid">
+        
+        <div class="service-card">
+          <div class="service-icon">📜</div>
+          <h3>Diligência Documental</h3>
+          <p>Análise técnica de matrículas (inteiro teor), verificação de ônus reais, ações reipersecutórias e levantamento de certidões negativas de débitos.</p>
+        </div>
 
-      <div class="service-card">
-        <div class="service-icon">✍️</div>
-        <h3>Contratos de Gaveta</h3>
-        <p>Elaboração e revisão de instrumentos particulares de compra e venda com cláusulas de proteção para ambas as partes.</p>
-      </div>
+        <div class="service-card">
+          <div class="service-icon">✍️</div>
+          <h3>Redação de Contratos</h3>
+          <p>Elaboração de instrumentos particulares de compra e venda, cessão de direitos (contratos de gaveta) e distratos, seguindo as normas vigentes do direito civil.</p>
+        </div>
 
-      <div class="service-card">
-        <div class="service-icon">🏛️</div>
-        <h3>Regularização de Imóveis</h3>
-        <p>Suporte no processo de averbação de construções, retificação de áreas e encaminhamento junto ao Registro de Imóveis de Araucária.</p>
-      </div>
+        <div class="service-card">
+          <div class="service-icon">🏛️</div>
+          <h3>Regularização de Áreas</h3>
+          <p>Instrução de processos para averbação de benfeitorias, retificação de metragens, unificação de lotes e cancelamento de alienações fiduciárias.</p>
+        </div>
 
-      <div class="service-card">
-        <div class="service-icon">📊</div>
-        <h3>Avaliação Mercadológica</h3>
-        <p>Estudo detalhado do valor real do seu imóvel com base no mercado atual da região metropolitana de Curitiba.</p>
-      </div>
-    </div>
+        <div class="service-card">
+          <div class="service-icon">⚖️</div>
+          <h3>Inventários e Usucapião</h3>
+          <p>Organização de documentação para processos de partilha e suporte técnico documental para ações de usucapião judicial ou extrajudicial.</p>
+        </div>
 
-    <section class="cta-services">
-      <h2>Precisa de suporte com algum documento?</h2>
-      <p>Clique abaixo para conversarmos agora mesmo pelo WhatsApp.</p>
-      <a href="https://wa.me/5541995683915" target="_blank" class="cta-button">
-        Falar com Especialista
-      </a>
+        <div class="service-card">
+          <div class="service-icon">📊</div>
+          <h3>Avaliação de Mercado</h3>
+          <p>Parecer Técnico de Avaliação Mercadológica (PTAM) baseado em métodos comparativos diretos e análise de dados reais do mercado local.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🏦</div>
+          <h3>Gestão de Financiamento</h3>
+          <p>Organização de pastas documentais para processos de crédito habitacional, liberação de FGTS e acompanhamento de contratos bancários.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="process-section">
+      <div class="container">
+        <div class="process-header">
+          <h2>Fluxo de Atendimento Técnico</h2>
+          <p>Execução metódica dividida em etapas claras.</p>
+        </div>
+        
+        <div class="process-steps">
+          <div class="step">
+            <span class="step-num">01</span>
+            <h4>Análise Preliminar</h4>
+            <p>Verificação da situação atual do imóvel e levantamento das pendências documentais.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">02</span>
+            <h4>Definição de Trâmite</h4>
+            <p>Identificação do caminho jurídico e administrativo para a regularização ou formalização.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">03</span>
+            <h4>Formalização</h4>
+            <p>Execução de contratos, assinaturas e encaminhamento aos órgãos competentes ou cartórios.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-container">
+      <div class="cta-services-wrapper">
+        <div class="cta-text-side">
+          <h2>Suporte Técnico e Regularização</h2>
+          <p>Análise documental e formalização de negócios imobiliários em Araucária por meio de processos transparentes e diretos.</p>
+          <a href="https://wa.me/5541995683915" class="cta-button" target="_blank">Enviar documentação para análise</a>
+        </div>
+
+        <div class="expert-profile">
+          <div class="profile-header">
+            <div class="avatar-circle">
+              <img src="/augusto-perfil.jpeg" alt="Augusto Narloch" class="expert-photo" />
+            </div>
+            <div class="profile-titles">
+              <strong>Augusto Narloch</strong>
+              <span>CRECI-PR F57121</span>
+            </div>
+          </div>
+          <div class="profile-bio">
+            Focado na execução técnica de processos imobiliários e segurança jurídica em Araucária e região metropolitana.
+          </div>
+          <ul class="trust-features">
+            <li>✅ Trâmites no Registro de Araucária</li>
+            <li>✅ Elaboração de Contratos Particulares</li>
+            <li>✅ Análise de Certidões e Matrículas</li>
+          </ul>
+        </div>
+      </div>
     </section>
   </main>
 </Layout>
 
 <style>
-  .services-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 120px 20px 80px;
+  /* Mantendo o seu CSS original, que já estava muito bom */
+  :global(html), :global(body) { background-color: #b2bfd0; margin: 0; font-family: sans-serif; }
+  
+  .site-texture {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999; opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 
-  .breadcrumb-nav { 
-    display: flex; align-items: center; gap: 8px;
-    font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 40px; 
-  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+  .services-page { padding-top: 80px; }
+
+  .breadcrumb-nav { padding: 40px 0 20px; font-size: 13px; font-weight: 600; color: #475569; }
   .breadcrumb-nav a { color: #2563eb; text-decoration: none; }
-  .breadcrumb-nav .divider { color: #cbd5e1; }
+  .breadcrumb-nav .divider { margin: 0 8px; color: #94a3b8; }
 
-  .services-header { text-align: center; max-width: 800px; margin: 0 auto 80px; }
-  .subtitle { color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.9rem; }
-  .services-header h1 { font-size: 3rem; color: #0f172a; margin: 15px 0; font-weight: 800; letter-spacing: -0.02em; }
-  .services-header p { font-size: 1.2rem; color: #475569; line-height: 1.6; }
+  .services-header { text-align: center; padding: 60px 0 80px; }
+  .subtitle { color: #2563eb; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; }
+  .services-header h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); color: #0f172a; margin: 20px 0; font-weight: 900; line-height: 1.1; }
+  .services-header p { font-size: 1.25rem; color: #334155; max-width: 800px; margin: 0 auto; line-height: 1.6; }
 
+  .section-container { max-width: 1250px; margin: 0 auto; padding: 0 20px 100px; }
+  
   .services-grid { 
     display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
     gap: 30px; 
-    margin-bottom: 100px;
   }
 
   .service-card {
-    background: white;
-    padding: 40px;
-    border-radius: 24px;
-    border: 1px solid #e2e8f0;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    padding: 45px;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
     transition: all 0.3s ease;
   }
 
   .service-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+    transform: translateY(-8px);
+    background: white;
     border-color: #2563eb;
   }
 
-  .service-icon { font-size: 2.5rem; margin-bottom: 20px; }
-  .service-card h3 { font-size: 1.4rem; color: #0f172a; margin-bottom: 15px; font-weight: 700; }
-  .service-card p { color: #64748b; line-height: 1.6; font-size: 1rem; }
+  .service-icon { font-size: 2.5rem; margin-bottom: 20px; display: block; }
+  .service-card h3 { font-size: 1.4rem; color: #0f172a; margin-bottom: 18px; font-weight: 800; }
+  .service-card p { color: #475569; line-height: 1.7; font-size: 1rem; }
 
-  .cta-services {
-    background: #0f172a;
-    padding: 80px 40px;
+  .process-section { background: #0f172a; padding: 100px 0; color: white; margin-bottom: 100px; }
+  .process-header { text-align: center; margin-bottom: 70px; }
+  .process-header h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; }
+  .process-header p { color: #94a3b8; font-size: 1.1rem; }
+  
+  .process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+  .step { position: relative; padding: 30px; background: rgba(255,255,255,0.03); border-radius: 20px; }
+  .step-num { font-size: 3rem; font-weight: 900; color: rgba(37, 99, 235, 0.2); position: absolute; top: 10px; right: 20px; }
+  .step h4 { font-size: 1.3rem; margin-bottom: 12px; color: #60a5fa; font-weight: 700; }
+  .step p { color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; }
+
+  .cta-services-wrapper {
+    background: #ffffff;
     border-radius: 40px;
-    text-align: center;
-    color: white;
+    padding: 60px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 60px;
+    align-items: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.1);
   }
 
-  .cta-services h2 { font-size: 2rem; margin-bottom: 15px; font-weight: 800; }
-  .cta-services p { color: #94a3b8; margin-bottom: 30px; font-size: 1.1rem; }
-
+  .cta-text-side h2 { font-size: 2.5rem; color: #0f172a; font-weight: 900; margin-bottom: 25px; }
+  .cta-text-side p { color: #475569; margin-bottom: 40px; font-size: 1.15rem; line-height: 1.7; }
+  
   .cta-button {
     display: inline-block;
     background: #2563eb;
     color: white;
-    padding: 18px 40px;
+    padding: 20px 40px;
     border-radius: 16px;
     text-decoration: none;
-    font-weight: 700;
-    transition: 0.3s;
+    font-weight: 800;
+    transition: all 0.3s ease;
   }
 
-  .cta-button:hover { background: #3b82f6; transform: scale(1.05); }
+  .expert-profile { background: #f8fafc; padding: 40px; border-radius: 24px; border: 1px solid #e2e8f0; }
+  .profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 25px; }
+  .avatar-circle { width: 70px; height: 70px; border-radius: 50%; overflow: hidden; border: 3px solid #2563eb; }
+  .expert-photo { width: 100%; height: 100%; object-fit: cover; }
+  .profile-titles strong { display: block; font-size: 1.3rem; color: #0f172a; }
+  .profile-titles span { color: #2563eb; font-weight: 700; font-size: 0.9rem; }
+  .profile-bio { color: #475569; margin-bottom: 30px; line-height: 1.6; }
+  .trust-features { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .trust-features li { font-weight: 700; color: #0f172a; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
 
-  @media (max-width: 768px) {
-    .services-header h1 { font-size: 2.2rem; }
-    .services-container { padding-top: 100px; }
+  .fade-in { animation: fadeIn 1s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; } }
+
+  @media (max-width: 992px) {
+    .cta-services-wrapper { grid-template-columns: 1fr; padding: 40px; }
   }
 </style>

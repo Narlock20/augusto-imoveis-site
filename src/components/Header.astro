@@ -8,12 +8,11 @@ const whatsappLink = "https://wa.me/5541995683915?text=Olá! Gostaria de informa
 
 <header class="header">
   <div class="header-container">
-  <a href="/" class="logo-wrapper">
-    <img src="/logo_marca.png" alt="Augusto Narloch Imóveis" class="site-logo" />
-
+    <a href="/" class="logo-wrapper">
+      <img src="/logo_marca.png" alt="Augusto Narloch Imóveis" class="site-logo" />
     </a>
 
-    <nav class="nav-menu">
+    <nav class="desktop-nav">
       <a href="/" class={isActive('/') ? 'active' : ''}>
         <span class="nav-text">Início</span>
         <span class="nav-dot"></span>
@@ -41,12 +40,62 @@ const whatsappLink = "https://wa.me/5541995683915?text=Olá! Gostaria de informa
       <a href={whatsappLink} class="btn-announce-premium" target="_blank">
         <div class="btn-content">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-          <span>Anunciar Imóvel</span>
+          <span class="btn-text-desktop">Anunciar Imóvel</span>
+          <span class="btn-text-mobile">Anunciar</span> 
         </div>
         <div class="btn-shine"></div>
       </a>
+
+      <button class="menu-toggle" id="open-menu-btn" aria-label="Abrir menu">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="18" x2="14" y2="18"></line></svg>
+      </button>
     </div>
   </div>
+
+  <aside class="mobile-drawer" id="mobile-drawer">
+    <div class="drawer-header">
+      <span class="drawer-title">Menu</span>
+      <button class="close-toggle" id="close-menu-btn" aria-label="Fechar menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <nav class="drawer-links">
+      <a href="/" class={isActive('/') ? 'active' : ''}>
+        <div class="link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+        Início
+      </a>
+      <a href="/compre" class={isActive('/compre') ? 'active' : ''}>
+        <div class="link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+        Comprar Imóvel
+      </a>
+      <a href="/alugue" class={isActive('/alugue') ? 'active' : ''}>
+        <div class="link-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+          </svg>
+        </div>
+        Alugar Imóvel
+      </a>
+      <a href="/servicos" class={isActive('/servicos') ? 'active' : ''}>
+        <div class="link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+        Serviços Documentais
+      </a>
+    </nav>
+
+    <div class="drawer-footer">
+      <div class="drawer-contact-card">
+        <span class="support-label">Fale direto comigo</span>
+        <a href="https://wa.me/5541995683915" class="drawer-wa-btn" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          (41) 99568-3915
+        </a>
+        <div class="drawer-creci">CRECI-PR F57121</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="menu-overlay" id="menu-overlay"></div>
 </header>
 
 <style>
@@ -72,70 +121,39 @@ const whatsappLink = "https://wa.me/5541995683915?text=Olá! Gostaria de informa
   }
 
   /* LOGO */
-/* Estilo da nova logo em imagem */
   .site-logo {
-    height: 90px; /* AUMENTEI AQUI: de 45px para 75px */
+    height: 90px; 
     width: auto; 
     object-fit: contain;
     transition: transform 0.3s ease;
   }
+  .logo-wrapper:hover .site-logo { transform: scale(1.05); }
 
-  .logo-wrapper:hover .site-logo {
-    transform: scale(1.05);
-  }
-
-  /* Responsivo para celulares */
-  @media (max-width: 768px) {
-    .site-logo {
-      height: 75px; /* AUMENTEI AQUI TAMBÉM: para ficar visível no mobile */
-    }
-  }
-
-
-  /* NAVEGAÇÃO PREMIUM ESTÁVEL (Sem vibração) */
-  .nav-menu { 
+  /* NAVEGAÇÃO DESKTOP (PC) */
+  .desktop-nav { 
     display: flex; 
     gap: 24px; 
   }
   
-  .nav-menu a {
-    text-decoration: none; 
-    color: #64748b; 
-    font-weight: 600; 
-    font-size: 14px;
-    position: relative; 
-    /* Aumentamos o padding para criar uma área de clique mais "sólida" e ancorar o mouse */
-    padding: 8px 0; 
-    
-    /* A transição agora altera apenas a cor, mantendo o texto totalmente imóvel no eixo Y */
-    transition: color 0.3s ease; 
+  .desktop-nav a {
+    text-decoration: none; color: #64748b; font-weight: 600; font-size: 14px;
+    position: relative; padding: 8px 0; transition: color 0.3s ease; 
   }
 
-  .nav-menu a:hover, .nav-menu a.active { 
-    color: #0f172a; 
-  }
+  .desktop-nav a:hover, .desktop-nav a.active { color: #0f172a; }
 
   .nav-dot {
-    position: absolute; 
-    bottom: -2px; 
-    left: 50%; 
-    transform: translateX(-50%) scale(0);
-    width: 5px; 
-    height: 5px; 
-    background: #2563eb; 
-    border-radius: 50%;
-    
-    /* Transição fluída e contínua, sem o efeito elástico que gerava vibração */
+    position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%) scale(0);
+    width: 5px; height: 5px; background: #2563eb; border-radius: 50%;
     transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
   }
 
-  /* O ponto cresce de forma contínua e ganha um brilho sutil */
-  .nav-menu a:hover .nav-dot, .nav-menu a.active .nav-dot { 
+  .desktop-nav a:hover .nav-dot, .desktop-nav a.active .nav-dot { 
     transform: translateX(-50%) scale(1); 
     box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
   }
 
-  /* AÇÕES */
+  /* AÇÕES DO HEADER */
   .header-actions { display: flex; align-items: center; gap: 24px; }
   .location-chip {
     display: flex; align-items: center; gap: 8px;
@@ -143,68 +161,225 @@ const whatsappLink = "https://wa.me/5541995683915?text=Olá! Gostaria de informa
     color: #475569; font-size: 12px; font-weight: 700;
   }
 
-  /* BOTÃO PREMIUM: ANUNCIAR IMÓVEL */
+  /* BOTÃO: ANUNCIAR IMÓVEL */
   .btn-announce-premium {
-    position: relative;
-    background: #0f172a;
-    color: white;
-    text-decoration: none;
-    padding: 12px 24px;
-    border-radius: 14px;
-    font-size: 14px;
-    font-weight: 700;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative; background: #0f172a; color: white; text-decoration: none;
+    padding: 12px 24px; border-radius: 14px; font-size: 14px; font-weight: 700;
+    overflow: hidden; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     box-shadow: 0 10px 20px rgba(15, 23, 42, 0.1);
   }
-
-  .btn-content {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    position: relative;
-    z-index: 2;
-  }
-
-  /* Brilho que passa pelo botão (Textura) */
+  .btn-content { display: flex; align-items: center; gap: 10px; position: relative; z-index: 2; }
+  .btn-text-mobile { display: none; }
   .btn-shine {
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      120deg,
-      transparent,
-      rgba(255, 255, 255, 0.1),
-      transparent
-    );
-    transition: all 0.6s;
-    z-index: 1;
+    position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: all 0.6s; z-index: 1;
   }
+  .btn-announce-premium:hover { transform: translateY(-3px) scale(1.02); background: #1e293b; box-shadow: 0 15px 30px rgba(15, 23, 42, 0.2); }
+  .btn-announce-premium:hover .btn-shine { left: 100%; }
+  .btn-announce-premium:active { transform: translateY(-1px); }
 
-  /* EFEITOS DE MOVIMENTO E SOMBRA */
-  .btn-announce-premium:hover {
-    transform: translateY(-3px) scale(1.02);
-    background: #1e293b;
-    box-shadow: 0 15px 30px rgba(15, 23, 42, 0.2);
-  }
+  /* BOTÃO HAMBÚRGUER (Escondido no PC) */
+  .menu-toggle { display: none; background: none; border: none; color: #0f172a; cursor: pointer; padding: 4px; }
 
-  .btn-announce-premium:hover .btn-shine {
-    left: 100%;
-  }
+  /* GAVETA MOBILE (Escondida no PC) */
+  .mobile-drawer { display: none; }
+  .menu-overlay { display: none; }
 
-  .btn-announce-premium:active {
-    transform: translateY(-1px);
-  }
-
-  /* RESPONSIVO */
+  /* =========================================
+     MODO MOBILE (ONDE A MÁGICA ACONTECE)
+  ========================================= */
   @media (max-width: 1024px) {
     .location-chip { display: none; }
     .header-container { padding: 0 20px; }
   }
 
   @media (max-width: 768px) {
-    .nav-menu { display: none; }
+    .header { padding: 10px 0; }
+    .site-logo { height: 50px; }
+    .header-actions { gap: 16px; }
+    
+    .desktop-nav { display: none; } /* Esconde o menu de PC */
+    .menu-toggle { display: block; } /* Mostra o hambúrguer */
+    
+    .btn-text-desktop { display: none; }
+    .btn-text-mobile { display: block; }
+    .btn-announce-premium { padding: 10px 16px; font-size: 13px;}
+
+    /* A GAVETA (APP-LIKE) */
+    .mobile-drawer {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      right: -100%; /* Escondida fora da tela */
+      width: 85%; /* Ocupa 85% da tela, deixa um pedacinho escuro visível */
+      max-width: 320px;
+      height: 100vh;
+      background: #ffffff;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+      transition: right 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      z-index: 2000;
+    }
+
+    .mobile-drawer.open {
+      right: 0; /* Desliza pra dentro */
+    }
+
+    /* Cabeçalho do Menu */
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 30px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .drawer-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+    }
+
+    .close-toggle {
+      background: #f1f5f9;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0f172a;
+      cursor: pointer;
+    }
+
+    /* Links do Menu com Ícones */
+    .drawer-links {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex-grow: 1; /* Empurra o rodapé pro fundo */
+    }
+
+    .drawer-links a {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1e293b;
+      padding: 10px 0;
+      transition: 0.2s;
+    }
+
+    .drawer-links a.active {
+      color: #2563eb;
+    }
+
+    .link-icon {
+      width: 40px;
+      height: 40px;
+      background: #f8fafc;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+    }
+
+    .drawer-links a.active .link-icon {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    /* Rodapé do Menu (Cartão de Contato) */
+    .drawer-footer {
+      padding: 30px;
+      background: #f8fafc;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .drawer-contact-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .support-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .drawer-wa-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .drawer-creci {
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* OVERLAY MÁGICO */
+    .menu-overlay {
+      display: block;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 1500;
+    }
+    
+    .menu-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 </style>
+
+<script>
+  // Nova Lógica: Agora temos botões de abrir E de fechar
+  const openBtn = document.getElementById('open-menu-btn');
+  const closeBtn = document.getElementById('close-menu-btn');
+  const drawer = document.getElementById('mobile-drawer');
+  const overlay = document.getElementById('menu-overlay');
+
+  function openMenu() {
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden'; // Trava a rolagem do site atrás do menu
+  }
+
+  function closeMenu() {
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = ''; // Libera a rolagem
+  }
+
+  // Eventos de Clique
+  if(openBtn) openBtn.addEventListener('click', openMenu);
+  if(closeBtn) closeBtn.addEventListener('click', closeMenu);
+  if(overlay) overlay.addEventListener('click', closeMenu);
+</script>
