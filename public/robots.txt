@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # O link do sitemap vai aqui embaixo (atualizaremos com seu domínio real depois)
-Sitemap: https://augustoimoveis.com.br/sitemap-index.xml
+Sitemap: https://augusto-narloch-imoveis.vercel.app/
