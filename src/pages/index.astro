@@ -8,10 +8,6 @@ import { sanityClient } from 'sanity:client'
 import { allPropertiesQuery } from '../lib/queries'
 import { urlFor } from '../lib/image'
 
-// ESTA É A LINHA DO TESTE:
-console.log("------------------------------------------");
-console.log("ID QUE O SITE ESTÁ USANDO AGORA:", sanityClient.config().projectId);
-console.log("------------------------------------------");
 
 const properties = await sanityClient.fetch(allPropertiesQuery)
 const featuredProperties = properties.filter(p => p.featured === true);
