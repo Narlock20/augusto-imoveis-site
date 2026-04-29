@@ -8,6 +8,11 @@ import { sanityClient } from 'sanity:client'
 import { allPropertiesQuery } from '../lib/queries'
 import { urlFor } from '../lib/image'
 
+// ESTA É A LINHA DO TESTE:
+console.log("------------------------------------------");
+console.log("ID QUE O SITE ESTÁ USANDO AGORA:", sanityClient.config().projectId);
+console.log("------------------------------------------");
+
 const properties = await sanityClient.fetch(allPropertiesQuery)
 const featuredProperties = properties.filter(p => p.featured === true);
 const normalProperties = properties.filter(p => p.featured !== true);
@@ -98,12 +103,8 @@ const normalProperties = properties.filter(p => p.featured !== true);
 
   :root {
     --bg-solid-gray: #b2bfd0; 
-    /* Azul mais profundo para passar nos testes de acessibilidade sobre o cinza */
-    --accent-blue: #1d4ed8; 
-    /* Azul quase preto para o texto não parecer "lavado" */
+    --accent-blue: #3b82f6;
     --text-main: #0f172a;
-    /* Cinza escuro para textos secundários */
-    --text-soft: #334155;
   }
 
   main { 
@@ -112,7 +113,6 @@ const normalProperties = properties.filter(p => p.featured !== true);
     padding-top: 20px;
   }
 
-  /* 1. HERO PREMIUM: Escurecemos o gradiente para o branco "saltar" */
   .hero-premium {
     position: relative;
     padding: 100px 24px; 
@@ -122,7 +122,7 @@ const normalProperties = properties.filter(p => p.featured !== true);
     margin-left: -50vw;
     margin-right: -50vw;
     background-image: 
-      linear-gradient(to bottom, rgba(15, 23, 42, 0.92) 0%, rgba(15, 23, 42, 0.6) 100%),
+      linear-gradient(to bottom, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.4) 100%),
       url('/hero-bg.png'); 
     background-size: cover;
     background-position: center;
@@ -141,94 +141,48 @@ const normalProperties = properties.filter(p => p.featured !== true);
     font-weight: 900;
     color: #ffffff;
     letter-spacing: -1.5px;
-    /* Aumentamos a profundidade da sombra */
-    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.6), 0 12px 16px rgba(0, 0, 0, 0.4);
   }
 
-  /* Azul mais claro no destaque do serif para contrastar com o fundo escuro do hero */
-  .text-serif { 
-    font-family: serif; 
-    font-style: italic; 
-    color: #93c5fd; 
-  }
+  .text-serif { font-family: serif; font-style: italic; color: #60a5fa; }
 
   .hero-description {
     font-size: 1.25rem; 
-    color: #f1f5f9; /* Branco gelo para não cansar a vista */
-    max-width: 800px;
-    line-height: 1.6;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    color: #f8fafc;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
   }
 
-  /* 2. SEÇÕES: Onde o contraste com o fundo cinza é vital */
   .section-container { max-width: 1300px; margin: 0 auto; padding: 60px 24px; }
-  
-  .section-header-refined { 
-    display: flex; 
-    align-items: flex-end; 
-    gap: 30px; 
-    margin-bottom: 40px; 
-  }
+  .section-header-refined { display: flex; align-items: flex-end; gap: 30px; margin-bottom: 40px; }
+  .title-group .label { font-size: 11px; text-transform: uppercase; font-weight: 800; color: var(--accent-blue); letter-spacing: 2px; display: block; margin-bottom: 8px; }
+  .title-group h2 { font-size: 2rem; font-weight: 800; color: var(--text-main); margin: 0; }
+  .section-header-refined .line { height: 1px; flex-grow: 1; background: linear-gradient(to right, rgba(0,0,0,0.1), transparent); margin-bottom: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 40px; }
 
-  .title-group .label { 
-    font-size: 12px; 
-    text-transform: uppercase; 
-    font-weight: 800; 
-    color: var(--accent-blue); 
-    letter-spacing: 2px; 
-    display: block; 
-    margin-bottom: 8px;
-    /* Sombra branca sutil para "descolar" do cinza */
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
-  }
-
-  .title-group h2 { 
-    font-size: 2.2rem; 
-    font-weight: 800; 
-    color: var(--text-main); 
-    margin: 0; 
-    letter-spacing: -0.5px;
-  }
-
-  .section-header-refined .line { 
-    height: 2px; /* Linha um pouco mais grossa */
-    flex-grow: 1; 
-    background: linear-gradient(to right, rgba(15, 23, 42, 0.2), transparent); 
-    margin-bottom: 12px; 
-  }
-
-  .grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); 
-    gap: 40px; 
-  }
-
-  /* 3. WHATSAPP: Cores vibrantes */
+  /* WHATSAPP PREMIUM */
   .whatsapp-premium-minimal {
     position: fixed; bottom: 60px; right: 40px;
     background: #25d366; color: #ffffff;
     padding: 14px 28px; border-radius: 100px;
-    text-decoration: none; font-weight: 800; font-size: 14px;
+    text-decoration: none; font-weight: 700; font-size: 14px;
     overflow: hidden; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
     z-index: 1000;
   }
 
   .whatsapp-premium-minimal .btn-content { display: flex; align-items: center; gap: 12px; position: relative; z-index: 2; }
   .whatsapp-premium-minimal .btn-shine {
     position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     transition: all 0.6s ease; z-index: 1;
   }
-  
   .whatsapp-premium-minimal:hover { transform: translateY(-5px) scale(1.03); background: #128c7e; }
+  .whatsapp-premium-minimal:hover .btn-shine { left: 100%; }
 
   .fade-in { animation: fadeIn 0.8s ease-out; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; } }
 
   @media (max-width: 768px) {
-    .hero-premium { padding: 80px 20px; }
-    h1 { font-size: 2.5rem; }
-    .title-group h2 { font-size: 1.8rem; }
+    .hero-premium { padding: 60px 20px; }
   }
 </style>

@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   // ADICIONE ESTA LINHA AQUI:
-  site: 'https://augustonarloch.com.br', 
+  site: 'https://augusto-narloch-imoveis.vercel.app/', 
   
   integrations: [
     sanity({
