@@ -47,7 +47,7 @@ const schemaGoogle = {
   "@type": "RealEstateListing",
   "name": `${imovel.title} | ${imovel.neighborhood}`,
   "description": imovel.description || `${tipoFisico} em ${imovel.neighborhood}. Confira agora!`,
-  "image": mainFullSize,
+  "image": mainWatermarked,
   "url": Astro.url.href, 
   "offers": {
     "@type": "Offer",
@@ -62,7 +62,7 @@ const schemaGoogle = {
 <Layout 
   title={`${imovel.title} | ${imovel.neighborhood}`}
   description={`${tipoFisico} em ${imovel.neighborhood}. Confira agora!`}
-  image={mainFullSize}
+  image={mainWatermarked}
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(schemaGoogle)} />
 
