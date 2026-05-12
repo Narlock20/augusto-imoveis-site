@@ -13,7 +13,7 @@ Plataforma imobiliária de alta performance desenvolvida com geração estática
 
 ## 🔗 Live Preview
 
-**[Acesse o Site em Produção](https://augusto-narloch-imoveis.vercel.app/)**
+**[Acesse o Site](https://augusto-narloch-imoveis.vercel.app/)**
 
 <br>
 
