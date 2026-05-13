@@ -78,8 +78,9 @@ O objetivo principal foi resolver desafios reais do setor: criar um catálogo de
 - **[Sanity.io](https://www.sanity.io/)** - Headless CMS 
 - **[Cloudinary](https://cloudinary.com/)** - CDN e manipulação de mídia On-the-Fly
 - **[PhotoSwipe](https://photoswipe.com/)** - Lightbox engine
+- **[Vercel](https://vercel.com/)** - Hospedagem e CI/CD
 - **HTML5 & CSS3** - Estruturação e estilização customizada
-- **Vercel** - Hospedagem e CI/CD
+
 
 ---
 
